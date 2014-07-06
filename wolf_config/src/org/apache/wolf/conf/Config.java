@@ -3,6 +3,9 @@ package org.apache.wolf.conf;
 public class Config {
 	
 	private String listen_address;
+	private String storage_port;
+	private String rpc_Timeout;
+	private int concurrent_writes;
 
 	public Config(){}
 
@@ -14,4 +17,27 @@ public class Config {
 		this.listen_address = listen_address;
 	}
 
+	public String getStorage_port() {
+		return storage_port;
+	}
+
+	public void setStorage_port(String storage_port) {
+		this.storage_port = storage_port;
+	}
+
+	public String getRpc_Timeout() {
+		return rpc_Timeout;
+	}
+
+	public void setRpc_Timeout(String rpc_Timeout) {
+		this.rpc_Timeout = rpc_Timeout;
+	}
+
+	public int getConcurrent_writes() {
+		return concurrent_writes;
+	}
+
+	public void setConcurrent_writes(int concurrent_writes) {
+		this.concurrent_writes = concurrent_writes;
+	}
 }

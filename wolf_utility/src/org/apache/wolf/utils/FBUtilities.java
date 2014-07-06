@@ -25,4 +25,20 @@ public class FBUtilities {
 		}
 		return localInetAddress_;
 	}
+
+	public static int encodedUTF8Length(String str) {
+		int strlen=str.length();
+		int utflen=0;
+		for(int i=0;i<strlen;i++){
+			int c=str.charAt(i);
+			if((c>0x0001)&&(c<=0x007F))
+				utflen++;
+			else if(c>0x007F)
+				utflen +=3;
+			else
+				utflen+=2;
+		}
+		
+		return utflen;
+	}
 }

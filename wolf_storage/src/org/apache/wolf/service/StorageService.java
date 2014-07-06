@@ -1,5 +1,11 @@
 package org.apache.wolf.service;
 
+import java.io.IOException;
+
+import javax.naming.ConfigurationException;
+
+import org.apache.wolf.message.MessageVerb;
+import org.apache.wolf.message.handler.HandlerTest;
 import org.apache.wolf.utils.FBUtilities;
 
 
@@ -12,12 +18,24 @@ public class StorageService {
 	public synchronized void initServer() {
 		initServer(RING_DELAY);
 	}
-
-	public void initServer(int delay) {
-		joinTokenRing(delay);
+	
+	public StorageService(){
+		MessageService.instance.registerVerbHandler(MessageVerb.MUTATION, new HandlerTest());
 	}
 
-	private void joinTokenRing(int delay) {
+	public void initServer(int delay) {
+			try {
+				joinTokenRing(delay);
+			} catch (ConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+
+	private void joinTokenRing(int delay) throws ConfigurationException, IOException {
 		MessageService.instance.listen(FBUtilities.getLocalAddress());
 	}
 

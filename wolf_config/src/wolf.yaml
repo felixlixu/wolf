@@ -1,1 +1,4 @@
 listen_address: 127.0.0.1
+storage_port: 9025
+rpc_Timeout: 60000
+concurrent_writes: 5

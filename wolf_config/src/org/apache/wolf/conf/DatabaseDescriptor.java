@@ -87,4 +87,16 @@ public class DatabaseDescriptor {
 	public static InetAddress getListenAddress() {
 		return listenAddress;
 	}
+
+	public static int getStoragePort() {
+		return Integer.parseInt(conf.getStorage_port());
+	}
+
+	public static long getRpcTimeout() {
+		return Long.parseLong(conf.getRpc_Timeout());
+	}
+
+	public static int getConcurrentWriters() {
+		return conf.getConcurrent_writes();
+	}
 }

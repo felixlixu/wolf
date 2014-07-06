@@ -11,6 +11,9 @@ public class ConfigTest {
 	@Test
 	public void ListAddresstest() {
 		Assert.assertEquals(DatabaseDescriptor.getListenAddress().getHostAddress(), "127.0.0.1");
+		Assert.assertEquals(DatabaseDescriptor.getStoragePort(), 9025);
+		Assert.assertEquals(DatabaseDescriptor.getRpcTimeout(), 60000);
+		Assert.assertEquals(DatabaseDescriptor.getConcurrentWriters(), 5);
 	}
 
 }
