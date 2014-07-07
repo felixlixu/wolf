@@ -1,11 +1,7 @@
 package org.apache.wolf.locator;
 
-public class SimpleSnitch implements IEndpointSnitch {
+public class SimpleSnitch extends AbstractEndpointSnitch {
 
-	@Override
-	public void gossiperStarting() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 }
