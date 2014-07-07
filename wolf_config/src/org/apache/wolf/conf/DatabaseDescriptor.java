@@ -5,9 +5,18 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.locator.DynamicEndpointSnitch;
+import org.apache.wolf.locator.EndpointSnitchInfo;
+import org.apache.wolf.locator.IEndpointSnitch;
+import org.apache.wolf.util.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Loader;
@@ -20,8 +29,9 @@ public class DatabaseDescriptor {
 	private static String DEFAULT_CONFIGURATION="wolf.yaml";
 	private static Logger logger=LoggerFactory.getLogger(DatabaseDescriptor.class);
 	private static InetAddress listenAddress;
-
 	private static Config conf;
+	private static InetAddress broadcastAddress;
+	private static IEndpointSnitch snitch;
 	
     public static void initDefaultsOnly()
     {
@@ -53,6 +63,21 @@ public class DatabaseDescriptor {
 					throw new ConfigurationException("Unknown listen_address"+conf.getListen_address()+"");
 				}
 			}
+			if(conf.getBroadcast_address()!=null){
+				if(conf.getBroadcast_address().equals("0.0.0.0")){
+					throw new ConfigurationException("broadcast_address cannot be 0.0.0.0!");
+				}
+				try{
+					broadcastAddress=InetAddress.getByName(conf.getBroadcast_address());
+				}catch(UnknownHostException e){
+					throw new ConfigurationException("Unknown broadcast_address "+ conf.getBroadcast_address());
+				}
+			}
+			if(conf.getEndpoint_snitch()==null){
+				throw new ConfigurationException("Missing endpoint_snitch directive");
+			}
+			snitch=CreateEndpointSnitch(conf.getEndpoint_snitch());
+			EndpointSnitchInfo.create();
 			
 		}catch(ConfigurationException e){
 			logger.error("Fatal configuration error",e);
@@ -84,6 +109,11 @@ public class DatabaseDescriptor {
 		return url;
 	}
 
+	private static IEndpointSnitch CreateEndpointSnitch(String endpoint_snitch) throws ConfigurationException {
+		IEndpointSnitch snitch=FBUtilities.construct(endpoint_snitch,"snith");
+		return conf.dynamic_snitch?new DynamicEndpointSnitch(snitch):snitch;
+	}
+
 	public static InetAddress getListenAddress() {
 		return listenAddress;
 	}
@@ -99,4 +129,36 @@ public class DatabaseDescriptor {
 	public static int getConcurrentWriters() {
 		return conf.getConcurrent_writes();
 	}
+
+	public static Set<InetAddress> getSeeds() {
+		String[] keys=conf.getSeeds();
+		Set<InetAddress> seeds=new HashSet<InetAddress>();
+		for(String key:keys){
+			try {
+				seeds.add(InetAddress.getByName(key));
+			} catch (UnknownHostException e) {
+				logger.error("init host failed. the host name is: ", e.getMessage());
+			}
+		}
+		return seeds;
+	}
+
+	public static InetAddress getBroadcastAddress() {
+		return broadcastAddress;
+	}
+	
+    public static void setBroadcastAddress(InetAddress broadcastAdd)
+    {
+        broadcastAddress = broadcastAdd;
+    }
+
+    public static IEndpointSnitch getEndpointSnitch()
+    {
+        return snitch;
+    }
+    
+    public static void setEndpointSnitch(IEndpointSnitch eps)
+    {
+        snitch = eps;
+    }
 }

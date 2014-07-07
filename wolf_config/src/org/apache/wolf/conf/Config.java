@@ -1,11 +1,17 @@
 package org.apache.wolf.conf;
 
+import java.util.Map;
+
 public class Config {
 	
 	private String listen_address;
 	private String storage_port;
 	private String rpc_Timeout;
 	private int concurrent_writes;
+	private String[] seeds;
+	private String broadcast_address;
+	private String endpoint_snitch;
+	public boolean dynamic_snitch=true;
 
 	public Config(){}
 
@@ -40,4 +46,29 @@ public class Config {
 	public void setConcurrent_writes(int concurrent_writes) {
 		this.concurrent_writes = concurrent_writes;
 	}
+
+	public String[] getSeeds() {
+		return seeds;
+	}
+
+	public void setSeeds(String[] seeds) {
+		this.seeds = seeds;
+	}
+
+	public String getBroadcast_address() {
+		return broadcast_address;
+	}
+
+	public void setBroadcast_address(String broadcast_address) {
+		this.broadcast_address = broadcast_address;
+	}
+
+	public String getEndpoint_snitch() {
+		return endpoint_snitch;
+	}
+
+	public void setEndpoint_snitch(String endpoint_snitch) {
+		this.endpoint_snitch = endpoint_snitch;
+	}
+
 }
