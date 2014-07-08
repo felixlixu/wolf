@@ -14,6 +14,7 @@ public class StageManager {
 	
 	static{
 		stages.put(Stage.MUTATION, multiThreadedConfigurableStage(Stage.MUTATION,DatabaseDescriptor.getConcurrentWriters()));
+		stages.put(Stage.GOSSIP, new JMXEnabledThreadPoolExecutor(Stage.GOSSIP));
 	}
 	
 	public static ExecutorService getStage(Stage stage) {

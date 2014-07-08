@@ -55,6 +55,7 @@ public class MessageServiceProducer {
 		private static final long serialVersionUID = 3826972761561603836L;
 		{
 			put(MessageVerb.MUTATION,Stage.MUTATION);
+			put(MessageVerb.GOSSIP_DIGEST_SYN,Stage.GOSSIP);
 		}
 	};
 	

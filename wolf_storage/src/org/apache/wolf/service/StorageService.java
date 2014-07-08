@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.gossip.message.handler.GossipDigestSynVerbHandler;
 import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.message.handler.HandlerTest;
 import org.apache.wolf.utils.FBUtilities;
@@ -20,7 +21,8 @@ public class StorageService {
 	}
 	
 	public StorageService(){
-		MessageService.instance.registerVerbHandler(MessageVerb.MUTATION, new HandlerTest());
+		MessageService.instance.registerVerbHandler(MessageVerb.MUTATION, new GossipDigestSynVerbHandler());
+		MessageService.instance.registerVerbHandler(MessageVerb.GOSSIP_DIGEST_SYN, new HandlerTest());
 	}
 
 	public void initServer(int delay) {

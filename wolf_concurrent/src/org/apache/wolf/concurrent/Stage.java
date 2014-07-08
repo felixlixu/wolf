@@ -1,13 +1,13 @@
 package org.apache.wolf.concurrent;
 
 public enum Stage {
-	MUTATION;
+	MUTATION,GOSSIP;
     public String getJmxType()
     {
         switch (this)
         {
             case MUTATION:
-
+            case GOSSIP:
                 return "request";
             default:
                 throw new AssertionError("Unknown stage " + this);
