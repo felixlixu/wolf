@@ -3,19 +3,12 @@ package org.apache.wolf.message;
 import java.net.InetAddress;
 
 import org.apache.wolf.concurrent.Stage;
-import org.apache.wolf.message.serialize.HeaderSerializer;
-import org.apache.wolf.serialize.IVersionedSerializer;
-import org.apache.wolf.service.MessageService;
+import org.apache.wolf.message.producer.MessageServiceProducer;
 
 public class Message {
 	final Header header_;
 	private final byte[] body_;
 	private final transient int version;
-	
-	private static IVersionedSerializer<Header> serializer_;
-	static{
-		serializer_=new HeaderSerializer();
-	}
 	
 	public Header getHeader() {
 		return header_;
@@ -34,6 +27,10 @@ public class Message {
 		this.body_=body;
 		this.version=version;
 	}
+	public Message(InetAddress from, MessageVerb verb,
+			byte[] body, Integer version) {
+		this(new Header(from,verb),body,version);
+	}
 	public MessageVerb getVerb() {
 		return this.getHeader().getVerb();
 	}
@@ -42,6 +39,6 @@ public class Message {
 	}
 	
 	public Stage getMessageType(){
-		return MessageService.verbStages.get(getVerb());
+		return MessageServiceProducer.verbStages.get(getVerb());
 	}
 }

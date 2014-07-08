@@ -1,7 +1,7 @@
 package org.apache.wolf.message;
 
 public enum MessageVerb {
-	MUTATION
+	MUTATION,GOSSIP_DIGEST_SYN
 }
 
 

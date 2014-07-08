@@ -5,10 +5,7 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.naming.ConfigurationException;
@@ -19,8 +16,6 @@ import org.apache.wolf.locator.IEndpointSnitch;
 import org.apache.wolf.util.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.Loader;
-import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -50,9 +45,6 @@ public class DatabaseDescriptor {
 					throw new AssertionError(e);
 				}
 				Constructor constructor=new Constructor(Config.class);
-				TypeDescription seedDesc=new TypeDescription(SeedProviderDef.class);
-				seedDesc.putMapPropertyType("parameters", String.class, String.class);
-				constructor.addTypeDescription(seedDesc);
 			    Yaml yaml=new Yaml(constructor);
 			    conf=(Config)yaml.load(input);
 			}
@@ -161,4 +153,8 @@ public class DatabaseDescriptor {
     {
         snitch = eps;
     }
+
+	public static String getClusterName() {
+		return conf.getCluster_name();
+	}
 }

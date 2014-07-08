@@ -1,8 +1,6 @@
 package org.apache.wolf.concurrent;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class JMXConfigurableThreadPoolExecutor extends JMXEnabledThreadPoolExecutor {

@@ -1,7 +1,5 @@
 package org.apache.wolf.conf;
 
-import java.util.Map;
-
 public class Config {
 	
 	private String listen_address;
@@ -12,6 +10,7 @@ public class Config {
 	private String broadcast_address;
 	private String endpoint_snitch;
 	public boolean dynamic_snitch=true;
+	private String cluster_name;
 
 	public Config(){}
 
@@ -69,6 +68,14 @@ public class Config {
 
 	public void setEndpoint_snitch(String endpoint_snitch) {
 		this.endpoint_snitch = endpoint_snitch;
+	}
+
+	public String getCluster_name() {
+		return cluster_name;
+	}
+
+	public void setCluster_name(String cluster_name) {
+		this.cluster_name = cluster_name;
 	}
 
 }

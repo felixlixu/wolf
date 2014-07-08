@@ -8,8 +8,8 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.apache.wolf.message.Header;
+import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.apache.wolf.serialize.IVersionedSerializer;
-import org.apache.wolf.service.MessageService;
 
 public class HeaderSerializer implements IVersionedSerializer<Header> {
 
@@ -42,7 +42,7 @@ public class HeaderSerializer implements IVersionedSerializer<Header> {
 			dis.readFully(value);
 			detail.put(key, value);
 		}
-		return new Header(from,MessageService.VERBS[verbOrdinal],detail);
+		return new Header(from,MessageServiceProducer.VERBS[verbOrdinal],detail);
 	}
 
 	public long serializedSize(Header t, int version) {

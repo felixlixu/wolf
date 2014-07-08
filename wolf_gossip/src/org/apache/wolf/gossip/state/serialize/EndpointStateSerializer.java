@@ -12,37 +12,40 @@ import org.apache.wolf.gossip.state.HeartBeatState;
 import org.apache.wolf.gossip.state.VersionedValue;
 import org.apache.wolf.serialize.IVersionedSerializer;
 
-public class EndpointSerializer implements IVersionedSerializer<EndpointState> {
+public class EndpointStateSerializer implements
+		IVersionedSerializer<EndpointState> {
 
 	@Override
 	public void serialized(EndpointState t, DataOutput dos, int version)
 			throws IOException {
-		HeartBeatState hbState=t.getHeartBeatState();
-		HeartBeatState.getSerializer().serialized(hbState, dos, version);
-		int size=t.applicationState.size();
+		HeartBeatState hbstate=t.getHeartBeatState();
+		HeartBeatState.getSerializer().serialized(hbstate, dos, version);
+		if (t.getApplicationStateMap()==null){
+			dos.writeInt(0);
+			return;
+		}
+		int size=t.getApplicationStateMap().size();
 		dos.writeInt(size);
-		for(Map.Entry<ApplicationState, VersionedValue> entry:t.applicationState.entrySet()){
+		for(Map.Entry<ApplicationState, VersionedValue> entry:t.getApplicationStateMap().entrySet()){
 			VersionedValue value=entry.getValue();
 			dos.writeInt(entry.getKey().ordinal());
-			VersionedValue.getSerializer().serialized(value,dos,version);
+			VersionedValue.getSerializer().serialized(value, dos, version);
 		}
-
 	}
 
 	@Override
 	public EndpointState deserialized(DataInput dis, int version)
 			throws IOException {
-		HeartBeatState hbstate=HeartBeatState.getSerializer().deserialized(dis, version);
-		EndpointState epState=new EndpointState(hbstate);
+		HeartBeatState hbState=HeartBeatState.getSerializer().deserialized(dis, version);
+		EndpointState epState=new EndpointState(hbState);
 		
 		int appStateSize=dis.readInt();
 		for(int i=0;i<appStateSize;i++){
 			int key=dis.readInt();
 			VersionedValue value=VersionedValue.getSerializer().deserialized(dis, version);
-			epState.addApplicationState(GossiperServiceProducer.STATE[key],value);
+			epState.addApplicationState(GossiperServiceProducer.STATE[key], value);
 		}
 		return epState;
-		
 	}
 
 	@Override

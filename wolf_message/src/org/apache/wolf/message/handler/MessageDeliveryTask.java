@@ -2,7 +2,7 @@ package org.apache.wolf.message.handler;
 
 import org.apache.wolf.message.Message;
 import org.apache.wolf.message.MessageVerb;
-import org.apache.wolf.service.MessageService;
+import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class MessageDeliveryTask implements Runnable {
 	
 	public void run() {
 		MessageVerb verb=message.getVerb();
-		IVerbHandler verbHandler=MessageService.instance.getVerbHandler(verb);
+		IVerbHandler verbHandler=MessageServiceProducer.instance.getVerbHandler(verb);
 		if(verbHandler==null){
 			logger.debug("Unknown verb {} ",verb);
 			return;

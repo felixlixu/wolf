@@ -5,11 +5,8 @@ import org.apache.wolf.serialize.IVersionedSerializer;
 
 public class VersionedValue implements Comparable<VersionedValue> {
 
-	public static IVersionedSerializer<VersionedValue> serializer;
-	
-	static{
-		serializer=new VersionedSerializer();
-	}
+	private static IVersionedSerializer<VersionedValue> serializer=new VersionedSerializer();
+
 
 	public VersionedValue(String value, int version) {
 		this.value=value;
@@ -39,6 +36,10 @@ public class VersionedValue implements Comparable<VersionedValue> {
 	public int compareTo(VersionedValue arg0) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public static IVersionedSerializer<VersionedValue> getSerializer() {
+		return serializer;
 	}
 
 }

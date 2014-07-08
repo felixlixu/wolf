@@ -33,6 +33,7 @@ public class FBUtilities {
         }
     }
 
+	@SuppressWarnings("unchecked")
 	public static<T> Class<T> classForName(String classname, String readable) throws ConfigurationException {
         try
         {

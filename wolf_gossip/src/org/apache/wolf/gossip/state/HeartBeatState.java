@@ -7,11 +7,8 @@ public class HeartBeatState {
 
 	private int generation;
 	private int version;
-	private static IVersionedSerializer<HeartBeatState> serializer;
+	private static IVersionedSerializer<HeartBeatState> serializer=new HeartBeatStateSerializer();
 	
-	static{
-		serializer=new HeartBeatStateSerializer();
-	}
 
 	public int getGeneration() {
 		return generation;
@@ -38,9 +35,17 @@ public class HeartBeatState {
 		this.version=v;
 	}
 
-	public static IVersionedSerializer<HeartBeatState> serialized() {
-		return serializer;
+	public void updateHearBeatState() {
+		version=VersionGenerator.getNextVersion();
 	}
 
+	public int getHeartBeatVersion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public static IVersionedSerializer<HeartBeatState> getSerializer() {
+		return serializer;
+	}
 	
 }

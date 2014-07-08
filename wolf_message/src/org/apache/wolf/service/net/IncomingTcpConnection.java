@@ -3,14 +3,13 @@ package org.apache.wolf.service.net;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
 import org.apache.wolf.message.Header;
 import org.apache.wolf.message.Message;
-import org.apache.wolf.service.MessageService;
+import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,18 +28,18 @@ public class IncomingTcpConnection extends Thread {
 	
 	public void run(){
 		DataInputStream input;
-		boolean isStream;
+		//boolean isStream=false;
 		int version;
 		try{
 			input=new DataInputStream(socket.getInputStream());
-			MessageService.validateMagic(input.readInt());
+			MessageServiceProducer.validateMagic(input.readInt());
 			int header=input.readInt();
-			isStream=MessageService.getBits(header,3,1)==1;
-			version=MessageService.getBits(header, 15, 8);
+			//isStream=MessageServiceProducer.getBits(header,3,1)==1;
+			version=MessageServiceProducer.getBits(header, 15, 8);
 			logger.debug("Version for {} is {} ",from,version);
 		    
 			input=new DataInputStream(new BufferedInputStream(socket.getInputStream(),4096));
-			Message msg=receiveMessage(input,version);
+			receiveMessage(input,version);
 			
 			//System.out.println("validate successfully");
 		}catch(EOFException e){
@@ -70,9 +69,9 @@ public class IncomingTcpConnection extends Thread {
 		while(remaining>0){
 			remaining-=input.skip(remaining);
 		}
-		if(version<=MessageService.version_){
+		if(version<=MessageServiceProducer.version_){
 			Message message=new Message(header,body,version);
-			MessageService.instance.receive(message,id);
+			MessageServiceProducer.instance.receive(message,id);
 			return message;
 		}
 		logger.debug("Received connection from newer protocol version {}. Ignorning message", version);

@@ -3,9 +3,7 @@ package org.apache.wolf.service.net;
 import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
@@ -13,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.apache.wolf.conf.DatabaseDescriptor;
 import org.apache.wolf.message.Header;
 import org.apache.wolf.message.Message;
-import org.apache.wolf.service.MessageService;
+import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +85,7 @@ public class OutboundTcpConnection extends Thread {
 	private void writeConnected(Message m, String id) {
 		try {
 			write(m,id,out);
-			completed++;
+			setCompleted(getCompleted() + 1);
 			if(active.peek()==null){
 				out.flush();
 			}
@@ -119,11 +117,9 @@ public class OutboundTcpConnection extends Thread {
 
 	private void write(Message message, String id, DataOutputStream out2) throws IOException {
 		int header=0;
-		header|=MessageService.serializerType_.ordinal();
-		if(false)
-			header|=4;
+		header|=MessageServiceProducer.serializerType_.ordinal();
 		header|=(message.getVersion()<<8);
-		out.writeInt(MessageService.PROTOCOL_MAGIC);
+		out.writeInt(MessageServiceProducer.PROTOCOL_MAGIC);
 		out.writeInt(header);
 		byte[] bytes=message.getBody();
 		int total=messageLength(message.getHeader(),id,bytes);
@@ -156,6 +152,15 @@ public class OutboundTcpConnection extends Thread {
 			}
 		}
 		return false;
+	}
+
+
+	public long getCompleted() {
+		return completed;
+	}
+
+	public void setCompleted(long completed) {
+		this.completed = completed;
 	}
 
 

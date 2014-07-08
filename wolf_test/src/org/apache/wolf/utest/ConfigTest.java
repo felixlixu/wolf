@@ -1,7 +1,5 @@
 package org.apache.wolf.utest;
 
-import static org.junit.Assert.*;
-
 import java.net.UnknownHostException;
 
 import junit.framework.Assert;

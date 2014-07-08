@@ -1,18 +1,13 @@
 package org.apache.wolf.utils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.naming.ConfigurationException;
-
 import org.apache.wolf.conf.DatabaseDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FBUtilities {
 
-	private static volatile Logger logger_=LoggerFactory.getLogger(FBUtilities.class);
+	//private static volatile Logger logger_=LoggerFactory.getLogger(FBUtilities.class);
 	private static volatile InetAddress localInetAddress_;
 	private static InetAddress broadcastInetAddress;
 	
