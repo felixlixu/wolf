@@ -29,7 +29,7 @@ import org.apache.wolf.message.Message;
 import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.service.GossipService;
 import org.apache.wolf.service.MessageService;
-import org.apache.wolf.utils.FBUtilities;
+import org.apache.wolf.util.ConfFBUtilities;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,7 @@ public class GossiperServiceProducer {
 			seeds.add(seed);
 		}
 		maybeInitalizeLocalState(gernerationNbr);
-		EndpointState localState=endpointStateMap.get(FBUtilities.getBroadcastAddress());
+		EndpointState localState=endpointStateMap.get(ConfFBUtilities.getBroadcastAddress());
 		DatabaseDescriptor.getEndpointSnitch().gossiperStarting();;
 		
         if (logger.isTraceEnabled())
@@ -70,12 +70,12 @@ public class GossiperServiceProducer {
 	
 	
 	private void maybeInitalizeLocalState(int gernerationNbr) {
-		EndpointState localState=endpointStateMap.get(FBUtilities.getBroadcastAddress());
+		EndpointState localState=endpointStateMap.get(ConfFBUtilities.getBroadcastAddress());
 		if(localState==null){
 			HeartBeatState hbState=new HeartBeatState(gernerationNbr);
 			localState=new EndpointState(hbState);
 			localState.markAlive();
-			endpointStateMap.put(FBUtilities.getBroadcastAddress(),localState);
+			endpointStateMap.put(ConfFBUtilities.getBroadcastAddress(),localState);
 		}
 	}
 	
@@ -120,7 +120,7 @@ public class GossiperServiceProducer {
 		FastByteArrayOutputStream bos=new FastByteArrayOutputStream();
 		DataOutputStream dos=new DataOutputStream(bos);
 		GossipDigestSynMessage.serializer.serialized(gDigestMessage,dos,version);
-		return new Message(FBUtilities.getBroadcastAddress(),MessageVerb.GOSSIP_DIGEST_SYN,bos.toByteArray(), version);
+		return new Message(ConfFBUtilities.getBroadcastAddress(),MessageVerb.GOSSIP_DIGEST_SYN,bos.toByteArray(), version);
 	}
 
 	public ScheduledFuture<?> getScheduledGossipTask() {
@@ -148,7 +148,7 @@ public class GossiperServiceProducer {
 	public void doGossipToSeed(IMessageProducer prod) {
 		int size=seeds.size();
 		if(size>0){
-			if(size==1&&seeds.contains(FBUtilities.getBroadcastAddress())){
+			if(size==1&&seeds.contains(ConfFBUtilities.getBroadcastAddress())){
 				return;
 			}
 			if(liveEndpoints.size()==0){
@@ -205,9 +205,9 @@ public class GossiperServiceProducer {
 		public void run() {
 			try{
 				MessageService.instance.waitUntilListening();
-				endpointStateMap.get(FBUtilities.getBroadcastAddress()).getHeartBeatState().updateHearBeatState();
+				endpointStateMap.get(ConfFBUtilities.getBroadcastAddress()).getHeartBeatState().updateHearBeatState();
 				if(logger.isTraceEnabled()){
-					logger.trace("My heartbeat is now " + endpointStateMap.get(FBUtilities.getBroadcastAddress()).getHeartBeatState().getHeartBeatVersion());
+					logger.trace("My heartbeat is now " + endpointStateMap.get(ConfFBUtilities.getBroadcastAddress()).getHeartBeatState().getHeartBeatVersion());
 				}
 				final List<GossipDigest> gDigests=new ArrayList<GossipDigest>();
 				GossiperServiceProducer.instance.makeRandomGossipDigest(gDigests);

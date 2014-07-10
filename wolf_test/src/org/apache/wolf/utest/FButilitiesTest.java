@@ -4,7 +4,7 @@ import javax.naming.ConfigurationException;
 
 import junit.framework.Assert;
 
-import org.apache.wolf.util.FBUtilities;
+import org.apache.wolf.utils.FBUtilities;
 import org.junit.Test;
 
 public class FButilitiesTest {

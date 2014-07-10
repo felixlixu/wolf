@@ -12,6 +12,7 @@ import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.message.handler.IMessageCall;
 import org.apache.wolf.message.handler.MessageCallTest;
 import org.apache.wolf.service.MessageService;
+import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ public class messageTest {
 	
 	@Test
 	public void sendRRTest(){
-		InetAddress to=FBUtilities.getLocalAddress();
+		InetAddress to=ConfFBUtilities.getLocalAddress();
 		Header header=new Header(to,MessageVerb.MUTATION,null);
 		Message message=new Message(header,new byte[10],12);
 		IMessageCall cb=new MessageCallTest();

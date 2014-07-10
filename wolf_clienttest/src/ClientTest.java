@@ -8,13 +8,13 @@ import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.message.handler.IMessageCall;
 import org.apache.wolf.message.handler.MessageCallTest;
 import org.apache.wolf.service.MessageService;
-import org.apache.wolf.utils.FBUtilities;
+import org.apache.wolf.util.ConfFBUtilities;
 
 
 public class ClientTest {
 
 	public static void main(String[] args) {
-		InetAddress to=FBUtilities.getLocalAddress();
+		InetAddress to=ConfFBUtilities.getLocalAddress();
 		HashMap<String,byte[]> h=new HashMap<String,byte[]>();
 		h.put("Test", new byte[9]);
 		

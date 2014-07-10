@@ -7,7 +7,7 @@ import javax.naming.ConfigurationException;
 import org.apache.wolf.gossip.message.handler.GossipDigestSynVerbHandler;
 import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.message.handler.HandlerTest;
-import org.apache.wolf.utils.FBUtilities;
+import org.apache.wolf.util.ConfFBUtilities;
 
 
 
@@ -38,7 +38,7 @@ public class StorageService {
 	}
 
 	private void joinTokenRing(int delay) throws ConfigurationException, IOException {
-		MessageService.instance.listen(FBUtilities.getLocalAddress());
+		MessageService.instance.listen(ConfFBUtilities.getLocalAddress());
 	}
 
 }

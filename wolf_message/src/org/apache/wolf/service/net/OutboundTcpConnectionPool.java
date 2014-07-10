@@ -6,6 +6,7 @@ import java.net.Socket;
 
 import org.apache.wolf.conf.DatabaseDescriptor;
 import org.apache.wolf.message.Message;
+import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 
 public class OutboundTcpConnectionPool {
@@ -32,7 +33,7 @@ public class OutboundTcpConnectionPool {
 	}
 
 	public Socket newSocket() throws IOException {
-		return new Socket(endPoint(),DatabaseDescriptor.getStoragePort(),FBUtilities.getLocalAddress(),0);
+		return new Socket(endPoint(),DatabaseDescriptor.getStoragePort(),ConfFBUtilities.getLocalAddress(),0);
 	}
 
 }

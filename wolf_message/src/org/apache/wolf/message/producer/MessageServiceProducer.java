@@ -27,7 +27,7 @@ import org.apache.wolf.serialize.SerializerType;
 import org.apache.wolf.service.net.OutboundTcpConnection;
 import org.apache.wolf.service.net.OutboundTcpConnectionPool;
 import org.apache.wolf.service.net.SocketThread;
-import org.apache.wolf.utils.FBUtilities;
+import org.apache.wolf.util.ConfFBUtilities;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +97,7 @@ public class MessageServiceProducer {
 
 	public void receive(Message message, String id) {
         if (logger.isTraceEnabled())
-            logger.trace(FBUtilities.getLocalAddress() + " received " + message.getVerb()
+            logger.trace(ConfFBUtilities.getLocalAddress() + " received " + message.getVerb()
                           + " from " + id + "@" + message.getFrom());
         Runnable runnable=new MessageDeliveryTask(message,id);
         ExecutorService stage=StageManager.getStage(message.getMessageType());
@@ -143,7 +143,7 @@ public class MessageServiceProducer {
 	private void sendOneWay(Message message, String id, InetAddress to) {
 		
 		if(logger.isTraceEnabled()){
-			logger.trace(FBUtilities.getLocalAddress() + " sending " + message.getVerb() + " to " + id + "@" + to);
+			logger.trace(ConfFBUtilities.getLocalAddress() + " sending " + message.getVerb() + " to " + id + "@" + to);
 		}
 		
 		OutboundTcpConnection connection=getConnection(to,message);

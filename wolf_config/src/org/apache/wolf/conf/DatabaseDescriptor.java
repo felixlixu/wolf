@@ -10,10 +10,11 @@ import java.util.Set;
 
 import javax.naming.ConfigurationException;
 
-import org.apache.wolf.locator.DynamicEndpointSnitch;
-import org.apache.wolf.locator.EndpointSnitchInfo;
-import org.apache.wolf.locator.IEndpointSnitch;
-import org.apache.wolf.util.FBUtilities;
+import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
+import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
+import org.apache.wolf.locator.snitch.IEndpointSnitch;
+import org.apache.wolf.util.ConfFBUtilities;
+import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;

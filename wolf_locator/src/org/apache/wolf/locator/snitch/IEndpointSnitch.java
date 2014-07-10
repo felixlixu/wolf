@@ -1,4 +1,4 @@
-package org.apache.wolf.locator;
+package org.apache.wolf.locator.snitch;
 
 public interface IEndpointSnitch {
 
