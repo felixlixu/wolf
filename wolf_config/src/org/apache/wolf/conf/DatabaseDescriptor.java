@@ -13,7 +13,6 @@ import javax.naming.ConfigurationException;
 import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
 import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
-import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

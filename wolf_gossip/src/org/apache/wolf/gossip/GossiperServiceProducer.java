@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.apache.wolf.concurrent.DebuggableScheduledThreadPoolExecutor;
 import org.apache.wolf.conf.DatabaseDescriptor;
@@ -35,9 +37,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GossiperServiceProducer {
-	private static long intervalInMillis;
 	private Random random = new Random();
-	private Set<InetAddress> seeds;
+	public final static int intervalInMillis = 1000;
+    private Comparator<InetAddress> inetcomparator = new Comparator<InetAddress>()
+    {
+        public int compare(InetAddress addr1,  InetAddress addr2)
+        {
+            return addr1.getHostAddress().compareTo(addr2.getHostAddress());
+        }
+    };
+	private Set<InetAddress> seeds=new ConcurrentSkipListSet<InetAddress>(inetcomparator);
 	private Map<InetAddress,EndpointState> endpointStateMap=new ConcurrentHashMap<InetAddress,EndpointState>();
 	private static Logger logger = LoggerFactory.getLogger(GossipService.class);
 	private ScheduledFuture<?> scheduledGossipTask;
@@ -46,8 +55,8 @@ public class GossiperServiceProducer {
 	private final ConcurrentMap<InetAddress, Integer> versions = new NonBlockingHashMap<InetAddress, Integer>();
 	
 	public static GossiperServiceProducer instance=new GossiperServiceProducer();
-	public static final ApplicationState[] STATE = null;
-	public static final DataOutputStream liveEndpoints = null;
+	public static final ApplicationState[] STATE = ApplicationState.values();;
+	public Set<InetAddress> liveEndpoints =  new ConcurrentSkipListSet<InetAddress>(inetcomparator);;
 	
 	
 	public void start(int gernerationNbr){
@@ -149,7 +158,7 @@ public class GossiperServiceProducer {
 		int size=seeds.size();
 		if(size>0){
 			if(size==1&&seeds.contains(ConfFBUtilities.getBroadcastAddress())){
-				return;
+				//return;
 			}
 			if(liveEndpoints.size()==0){
 				sendGossip(prod,seeds);

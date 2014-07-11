@@ -6,7 +6,8 @@ import org.apache.wolf.serialize.IVersionedSerializer;
 public class VersionedValue implements Comparable<VersionedValue> {
 
 	private static IVersionedSerializer<VersionedValue> serializer=new VersionedSerializer();
-
+    public final static char DELIMITER = ',';
+    public final static String DELIMITER_STR = new String(new char[] { DELIMITER });
 
 	public VersionedValue(String value, int version) {
 		this.value=value;

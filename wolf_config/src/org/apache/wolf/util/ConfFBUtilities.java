@@ -1,10 +1,9 @@
 package org.apache.wolf.util;
 
-import java.lang.reflect.InvocationTargetException;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.naming.ConfigurationException;
 
 import org.apache.wolf.conf.DatabaseDescriptor;
 

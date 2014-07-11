@@ -4,5 +4,5 @@ rpc_Timeout: 60000
 concurrent_writes: 5
 seeds: 
  - localhost
- - 172.0.0.1
-endpoint_snitch: org.apache.wolf.locator.SimpleSnitch
+endpoint_snitch: org.apache.wolf.locator.snitch.SimpleSnitch
+cluster_name: test

@@ -16,20 +16,7 @@ import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 import org.junit.Test;
 
-public class messageTest {
-	/*@Test
-	public void serverTest(){
-		try {
-			MessageService.instance.listen(DatabaseDescriptor.getListenAddress());
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}*/
-	
+public class messageTest {	
 	@Test
 	public void sendRRTest(){
 		InetAddress to=ConfFBUtilities.getLocalAddress();

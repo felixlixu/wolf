@@ -7,6 +7,7 @@ import org.apache.wolf.token.Token;
 
 public class DhtService {
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static int firstTokenIndex(final ArrayList ring,Token start,boolean insertMin){
 		assert ring.size()>0;
 		
@@ -20,6 +21,7 @@ public class DhtService {
 		return i;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static Token firstToken(final ArrayList<Token> ring,Token start){
 		return ring.get(firstTokenIndex(ring,start,false));
 	}

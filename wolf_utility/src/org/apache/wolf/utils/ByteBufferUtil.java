@@ -16,4 +16,8 @@ public class ByteBufferUtil {
 		return charset.newDecoder().decode(buffer).duplicate().toString();
 	}
 
+	public static ByteBuffer bytes(String s) {
+		return ByteBuffer.wrap(s.getBytes(UTF_8));
+	}
+
 }

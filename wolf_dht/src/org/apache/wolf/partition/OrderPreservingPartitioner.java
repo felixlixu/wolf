@@ -4,8 +4,11 @@ import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 
+import javax.naming.ConfigurationException;
+
 import org.apache.wolf.token.StringToken;
 import org.apache.wolf.token.Token;
+import org.apache.wolf.token.TokenFactory;
 import org.apache.wolf.utils.ByteBufferUtil;
 import org.apache.wolf.utils.FBUtilities;
 import org.apache.wolf.utils.Pair;
@@ -14,9 +17,11 @@ public class OrderPreservingPartitioner extends AbstractPartitioner<StringToken>
 
 	public static final StringToken MINIMUM=new StringToken("");
 	public static final BigInteger CHAR_MASK = new BigInteger("65535");
-	
+    public final static char DELIMITER = ',';
+    public final static String DELIMITER_STR = new String(new char[] { DELIMITER });
+    
 	@Override
-	public Token getMinimumToken() {
+	public Token<?> getMinimumToken() {
 		return MINIMUM;
 	}
 
@@ -31,6 +36,7 @@ public class OrderPreservingPartitioner extends AbstractPartitioner<StringToken>
 		return new StringToken(skey);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Token midpoint(Token left, Token right) {
 		int sigchars=Math.max(((StringToken)left).token.length(), ((StringToken)right).token.length());
@@ -54,6 +60,7 @@ public class OrderPreservingPartitioner extends AbstractPartitioner<StringToken>
         return new String(chars);
 	}
 
+	//return integer from hight to low.
 	private static BigInteger bigForString(String str, int sigchars) {
 		assert str.length()<=sigchars;
 		BigInteger big=BigInteger.ZERO;
@@ -64,5 +71,40 @@ public class OrderPreservingPartitioner extends AbstractPartitioner<StringToken>
 		}
 		return big;
 	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public TokenFactory getTokenFactory() {
+		return tokenFactory;
+	}
+	
+	private final TokenFactory<String> tokenFactory=new TokenFactory<String>(){
+
+		@Override
+		public ByteBuffer toByteArray(Token<String> stringToken) {
+			return ByteBufferUtil.bytes(stringToken.token);
+		}
+
+		@Override
+		public Token<String> fromByteArray(ByteBuffer bytes) {
+			try{
+				return new StringToken(ByteBufferUtil.String(bytes));
+			}catch(CharacterCodingException e){
+				throw new RuntimeException(e);
+			}
+		}
+
+		@Override
+		public Token<String> fromString(String string) {
+			return new StringToken(string);
+		}
+
+		@Override
+		public void validate(String token) throws ConfigurationException {
+			if(token.contains(DELIMITER_STR))
+				 throw new ConfigurationException("Tokens may not contain the character " + DELIMITER_STR);
+		}
+		
+	};
 
 }

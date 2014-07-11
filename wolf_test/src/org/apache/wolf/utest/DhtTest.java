@@ -1,6 +1,7 @@
 package org.apache.wolf.utest;
 
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,5 +46,13 @@ public class DhtTest {
 		ByteBuffer bf=ByteBuffer.wrap(str.getBytes());
 		StringToken strToke=new OrderPreservingPartitioner().getToken(bf);
 		Assert.assertEquals(str,strToke.token);
+	}
+	
+	@Test
+	public void TestBigInteger(){
+		StringToken str=new StringToken("THISdddddd");
+		StringToken str1=new StringToken("THISddd");
+		System.out.println(new OrderPreservingPartitioner().midpoint(str, str1).token);
+		Assert.assertTrue(new OrderPreservingPartitioner().midpoint(str, str1).token.toString().contains("THI"));
 	}
 }

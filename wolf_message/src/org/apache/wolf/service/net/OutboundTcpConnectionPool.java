@@ -7,7 +7,6 @@ import java.net.Socket;
 import org.apache.wolf.conf.DatabaseDescriptor;
 import org.apache.wolf.message.Message;
 import org.apache.wolf.util.ConfFBUtilities;
-import org.apache.wolf.utils.FBUtilities;
 
 public class OutboundTcpConnectionPool {
 

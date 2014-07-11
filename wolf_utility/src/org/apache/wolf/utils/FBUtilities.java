@@ -2,8 +2,6 @@ package org.apache.wolf.utils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import javax.naming.ConfigurationException;
 
