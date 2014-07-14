@@ -2,6 +2,7 @@ package org.apache.wolf.token;
 
 import java.io.Serializable;
 
+import org.apache.wolf.DhtService;
 import org.apache.wolf.partition.IPartitioner;
 import org.apache.wolf.ring.IRingPosition;
 
@@ -22,14 +23,15 @@ public abstract class Token<T> implements IRingPosition<Token<T>>,Serializable {
 	public Token<T> getToken() {
 		return this;
 	}
+	
+	public boolean isMinimum() {
+		return isMinimum(DhtService.getPartitioner());
+	}
 
 	@Override
-	public boolean isMinimum(IPartitioner<?> partitioner) {
+	public boolean isMinimum(IPartitioner partitioner) {
 		return this.equals(partitioner.getMinimumToken());
 	}
 
-	 /**
-     * This determines the comparison for node destination purposes.
-     */
-    abstract public int compareTo(Token<T> o);
+    abstract public int compareTo(Token<T> token);
 }

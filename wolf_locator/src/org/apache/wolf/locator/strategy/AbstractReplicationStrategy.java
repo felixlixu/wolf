@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.locator.token.TokenMetadata;
 import org.apache.wolf.token.StringToken;
 import org.apache.wolf.token.Token;
@@ -16,6 +17,15 @@ public abstract class AbstractReplicationStrategy {
 	
 	private final Map<Token, ArrayList<InetAddress>> cachedEndpoints = new NonBlockingHashMap<Token, ArrayList<InetAddress>>();
 
+	protected final Map<String,String> configOptions;
+	
+	protected IEndpointSnitch snitch;
+	
+	AbstractReplicationStrategy(TokenMetadata metadata,Map<String,String> configOptions){
+		this.tokenMetadata=metadata;
+		this.configOptions=configOptions;
+	}
+	
 	public ArrayList<InetAddress> getNaturalEndpoint(String str){
 		Token token=new StringToken(str);
 		Token keyToken=TokenMetadata.firstToken(tokenMetadata.getSortedTokens(), token);
@@ -37,6 +47,8 @@ public abstract class AbstractReplicationStrategy {
 			Token token, TokenMetadata tokenMetadataClone);
 
 	private ArrayList<InetAddress> getCachedEndpoints(Token keyToken) {
+		if(keyToken==null)
+			return null;
 		return cachedEndpoints.get(keyToken);
 	}
 }

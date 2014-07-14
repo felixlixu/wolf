@@ -2,7 +2,9 @@ listen_address: 127.0.0.1
 storage_port: 9025
 rpc_Timeout: 60000
 concurrent_writes: 5
+broadcast_address: localhost
 seeds: 
  - localhost
 endpoint_snitch: org.apache.wolf.locator.snitch.SimpleSnitch
 cluster_name: test
+partitioner: org.apache.wolf.partition.OrderPreservingPartitioner

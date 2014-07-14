@@ -11,6 +11,7 @@ public class Config {
 	private String endpoint_snitch;
 	public boolean dynamic_snitch=true;
 	private String cluster_name;
+	private String partitioner;
 
 	public Config(){}
 
@@ -76,6 +77,14 @@ public class Config {
 
 	public void setCluster_name(String cluster_name) {
 		this.cluster_name = cluster_name;
+	}
+
+	public String getPartitioner() {
+		return partitioner;
+	}
+
+	public void setPartitioner(String partitioner) {
+		this.partitioner = partitioner;
 	}
 
 }

@@ -1,15 +1,26 @@
 package org.apache.wolf.utest;
 
-
-import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import javax.naming.ConfigurationException;
+
+import org.apache.wolf.DhtService;
+import org.apache.wolf.conf.DatabaseDescriptor;
+import org.apache.wolf.locator.strategy.AbstractReplicationStrategy;
+import org.apache.wolf.locator.strategy.OldNetworkTopologyStrategy;
+import org.apache.wolf.locator.token.TokenMetadata;
+import org.apache.wolf.partition.IPartitioner;
 import org.apache.wolf.partition.OrderPreservingPartitioner;
 import org.apache.wolf.token.StringToken;
+import org.apache.wolf.token.Token;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +47,7 @@ public class DhtTest {
 	
 	@Test
 	public void TestPartitionerGetMinimum(){
-		StringToken token=new StringToken("");
+		Token token=new StringToken("");
 		Assert.assertEquals(new OrderPreservingPartitioner().getMinimumToken().compareTo(token),0);
 	}
 	
@@ -53,6 +64,35 @@ public class DhtTest {
 		StringToken str=new StringToken("THISdddddd");
 		StringToken str1=new StringToken("THISddd");
 		System.out.println(new OrderPreservingPartitioner().midpoint(str, str1).token);
-		Assert.assertTrue(new OrderPreservingPartitioner().midpoint(str, str1).token.toString().contains("THI"));
+		Assert.assertTrue(new OrderPreservingPartitioner().midpoint(str, str1).token.toString().contains("HI"));
+	}
+	
+	@Test
+    public void tokenFactory() throws UnknownHostException
+    {
+		TokenMetadata metadata=new TokenMetadata();
+		Token token1 = new StringToken("HelloWorld12");
+        InetAddress add1 = DatabaseDescriptor.getBroadcastAddress();
+        metadata.updateNormalToken(token1, add1);
+        Assert.assertEquals(metadata.getSortedTokens().size(), 1);
+    }
+	
+	@Test
+	public void TestAssignToken() throws ConfigurationException{
+		TokenMetadata metadata=new TokenMetadata();
+		Map<String,String> configOptions=new HashMap<String,String>();
+		configOptions.put("replication_factor", "1");
+		IPartitioner partitioner=DatabaseDescriptor.getPartitioner();
+		DhtService.setPartitioner(partitioner);
+		
+		Token token1 = new StringToken("HelloWorld12");
+        InetAddress add1 = DatabaseDescriptor.getBroadcastAddress();
+        metadata.updateNormalToken(token1, add1);
+		
+		AbstractReplicationStrategy replication=new OldNetworkTopologyStrategy(metadata,configOptions);
+		String token="helloworld";
+		ArrayList<InetAddress> endpoints=replication.getNaturalEndpoint(token);
+		Assert.assertEquals(endpoints.size(), 1);
+		Assert.assertEquals(endpoints.get(0).getHostName(), "localhost");
 	}
 }

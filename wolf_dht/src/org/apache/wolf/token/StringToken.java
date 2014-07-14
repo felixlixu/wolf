@@ -12,9 +12,8 @@ public class StringToken extends Token<String> {
 		super(token);
 	}
 	
-	@Override
+	
 	public int compareTo(Token<String> o){
-		return this.token.compareTo(o.token);
+		return token.compareTo(o.token);
 	}
-
 }

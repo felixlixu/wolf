@@ -13,6 +13,7 @@ import javax.naming.ConfigurationException;
 import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
 import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
+import org.apache.wolf.partition.IPartitioner;
 import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ public class DatabaseDescriptor {
 	private static Config conf;
 	private static InetAddress broadcastAddress;
 	private static IEndpointSnitch snitch;
+	private static IPartitioner partitioner;
 	
     public static void initDefaultsOnly()
     {
@@ -65,6 +67,16 @@ public class DatabaseDescriptor {
 					throw new ConfigurationException("Unknown broadcast_address "+ conf.getBroadcast_address());
 				}
 			}
+			
+			if(conf.getPartitioner()==null){
+				throw new ConfigurationException("Missing directive:partitioner");
+			}
+			try{
+				partitioner=FBUtilities.construct(conf.getPartitioner(), "partitioner");
+			}catch(Exception e){
+				throw new ConfigurationException("Invalid partitioner class");
+			}
+			
 			if(conf.getEndpoint_snitch()==null){
 				throw new ConfigurationException("Missing endpoint_snitch directive");
 			}
@@ -156,5 +168,9 @@ public class DatabaseDescriptor {
 
 	public static String getClusterName() {
 		return conf.getCluster_name();
+	}
+
+	public static IPartitioner getPartitioner() throws ConfigurationException {
+		return partitioner;
 	}
 }
