@@ -15,6 +15,16 @@ public class StorageService {
 
 	public static final StorageService instance = new StorageService();
 	private static final int RING_DELAY = 10;
+	private boolean initialized;
+	private boolean isClientMode;
+
+	public boolean isInitialized() {
+		return initialized;
+	}
+
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
 
 	public synchronized void initServer() {
 		initServer(RING_DELAY);
@@ -26,13 +36,22 @@ public class StorageService {
 	}
 
 	public void initServer(int delay) {
-			try {
-				joinTokenRing(delay);
-			} catch (ConfigurationException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		if(initialized){
+			if(isClientMode){
+				throw new UnsupportedOperationException("StorageService does not supported switching modes.");
 			}
+			return;
+		}
+		initialized=true;
+		isClientMode=false;
+		
+		try {
+			joinTokenRing(delay);
+		} catch (ConfigurationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void joinTokenRing(int delay) throws ConfigurationException, IOException {

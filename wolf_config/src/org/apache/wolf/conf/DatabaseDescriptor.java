@@ -29,6 +29,7 @@ public class DatabaseDescriptor {
 	private static InetAddress broadcastAddress;
 	private static IEndpointSnitch snitch;
 	private static IPartitioner partitioner;
+	public static final String SNAPSHOT_SUBDIR_NAME = "snapshots";
 	
     public static void initDefaultsOnly()
     {

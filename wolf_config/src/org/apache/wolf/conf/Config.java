@@ -2,6 +2,7 @@ package org.apache.wolf.conf;
 
 public class Config {
 	
+	public static String SNAPSHOT_SUBDIR_NAME="snapshots";
 	private String listen_address;
 	private String storage_port;
 	private String rpc_Timeout;
