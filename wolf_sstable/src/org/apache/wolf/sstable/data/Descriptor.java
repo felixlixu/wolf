@@ -42,7 +42,7 @@ public class Descriptor {
 	
     public String baseFilename() {
 		StringBuilder buff=new StringBuilder();
-		buff.append(directory).append(File.pathSeparatorChar);
+		buff.append(directory).append(File.separatorChar);
 		buff.append(cfname).append(separator);
 		if(temp){
 			buff.append(SSTable.TEMPFILE_MARKER).append(separator);

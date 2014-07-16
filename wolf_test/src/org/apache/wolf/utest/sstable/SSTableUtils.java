@@ -1,6 +1,5 @@
-package org.apache.wolf.sstable;
+package org.apache.wolf.utest.sstable;
 
-import org.apache.wolf.sstable.data.Context;
 
 
 public class SSTableUtils {

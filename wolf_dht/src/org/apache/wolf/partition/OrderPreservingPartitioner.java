@@ -6,6 +6,7 @@ import java.nio.charset.CharacterCodingException;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.token.DecoratedKey;
 import org.apache.wolf.token.StringToken;
 import org.apache.wolf.token.Token;
 import org.apache.wolf.token.TokenFactory;
@@ -106,5 +107,10 @@ public class OrderPreservingPartitioner extends AbstractPartitioner<StringToken>
 		}
 		
 	};
+
+	@Override
+	public DecoratedKey decoratekey(ByteBuffer key) {
+		return new DecoratedKey<StringToken>(getToken(key),key);
+	}
 
 }

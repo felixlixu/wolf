@@ -2,6 +2,7 @@ package org.apache.wolf.partition;
 
 import java.nio.ByteBuffer;
 
+import org.apache.wolf.token.DecoratedKey;
 import org.apache.wolf.token.Token;
 import org.apache.wolf.token.TokenFactory;
 
@@ -16,5 +17,7 @@ public interface IPartitioner<T extends Token<?>> {
 	
 	@SuppressWarnings("rawtypes")
 	TokenFactory getTokenFactory();
+
+	DecoratedKey decoratekey(ByteBuffer key);
 
 }

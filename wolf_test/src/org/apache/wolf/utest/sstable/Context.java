@@ -1,4 +1,4 @@
-package org.apache.wolf.sstable.data;
+package org.apache.wolf.utest.sstable;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,14 +8,18 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.naming.ConfigurationException;
+
 import org.apache.wolf.sstable.SSTableReader;
-import org.apache.wolf.sstable.SSTableUtils;
 import org.apache.wolf.sstable.SSTableWriter;
+import org.apache.wolf.sstable.data.Component;
+import org.apache.wolf.sstable.data.Descriptor;
+import org.apache.wolf.token.DecoratedKey;
 public class Context {
 
-	private String cfname=SSTableUtils.CFNAME;
+	private String cfname="Keyspace1";
 	private Descriptor dest;
-	private String ksname=SSTableUtils.TABLENAME;
+	private String ksname="Standard1";
 	private int generation;
 	private boolean cleanup;
 
@@ -24,14 +28,14 @@ public class Context {
 		return this;
 	}
 
-	public SSTableReader writeRow(Map<ByteBuffer, ByteBuffer> entries) throws IOException {
+	public SSTableReader writeRow(Map<ByteBuffer, ByteBuffer> entries) throws IOException, ConfigurationException {
 		File datafile=(dest==null)?tempSSTableFile(ksname,cfname,generation):new File(dest.filenameFor(Component.DATA));
 		SSTableWriter writer=new SSTableWriter(datafile.getAbsolutePath(),entries.size());
-		SortedMap<ByteBuffer,ByteBuffer> sorted=new TreeMap<ByteBuffer,ByteBuffer>();
+		SortedMap<DecoratedKey,ByteBuffer> sorted=new TreeMap<DecoratedKey,ByteBuffer>();
 		for(Map.Entry<ByteBuffer, ByteBuffer> entry:entries.entrySet()){
-			sorted.put(entry.getKey(), entry.getValue());
+			sorted.put(writer.partitioner.decoratekey(entry.getKey()),entry.getValue());
 		}
-		final Iterator<Map.Entry<ByteBuffer,ByteBuffer>> iter=sorted.entrySet().iterator();
+		final Iterator<Map.Entry<DecoratedKey,ByteBuffer>> iter=sorted.entrySet().iterator();
 		return write(sorted.size(),new Appender(){
 
 			@Override
@@ -39,23 +43,25 @@ public class Context {
 				if(!iter.hasNext()){
 					return false;
 				}
-				Map.Entry<ByteBuffer, ByteBuffer> entry=iter.next();
+				Map.Entry<DecoratedKey, ByteBuffer> entry=iter.next();
 				writer.append(entry.getKey(),entry.getValue());
 				return true;
 			}
-		});
+		},writer);
 	}
 
-	private SSTableReader write(int expectedSize, Appender appender) throws IOException {
-        File datafile = (dest == null) ? tempSSTableFile(ksname, cfname, generation) : new File(dest.filenameFor(Component.DATA));
-        SSTableWriter writer = new SSTableWriter(datafile.getAbsolutePath(), expectedSize);
+	private SSTableReader write(int expectedSize, Appender appender,SSTableWriter writer) throws IOException, ConfigurationException {
+        //File datafile = (dest == null) ? tempSSTableFile(ksname, cfname, generation) : new File(dest.filenameFor(Component.DATA));
+        //SSTableWriter writer = new SSTableWriter(datafile.getAbsolutePath(), expectedSize);
         long start = System.currentTimeMillis();
         while (appender.append(writer)) { /* pass */ }
         SSTableReader reader = writer.closeAndOpenReader();
         // mark all components for removal
-        if (cleanup)
-            for (Component component : reader.components)
-                new File(reader.descriptor.filenameFor(component)).deleteOnExit();
+        if (cleanup){
+            for (Component component : reader.components){
+                //new File(reader.descriptor.filenameFor(component)).deleteOnExit();
+            }
+        }
         return reader;
 	}
 

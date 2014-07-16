@@ -12,7 +12,7 @@ public enum Type {
 	STATS("Statistics.db"),
 	DIGEST("Digest.sha1");
 	
-	final String repr;
+	public final String repr;
 	
 	final static EnumSet<Type> TYPES = EnumSet.allOf(Type.class);
 	
