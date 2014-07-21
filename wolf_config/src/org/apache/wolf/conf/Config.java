@@ -13,6 +13,8 @@ public class Config {
 	public boolean dynamic_snitch=true;
 	private String cluster_name;
 	private String partitioner;
+	private int rpc_port;
+	private String rpc_address;
 
 	public Config(){}
 
@@ -86,6 +88,22 @@ public class Config {
 
 	public void setPartitioner(String partitioner) {
 		this.partitioner = partitioner;
+	}
+
+	public int getRpc_port() {
+		return rpc_port;
+	}
+
+	public void setRpc_port(int rpc_port) {
+		this.rpc_port = rpc_port;
+	}
+
+	public String getRpc_address() {
+		return rpc_address;
+	}
+
+	public void setRpc_address(String rpc_address) {
+		this.rpc_address = rpc_address;
 	}
 
 }

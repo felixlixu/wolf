@@ -10,10 +10,13 @@ import java.util.Set;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.locator.data.KSMetaData;
+import org.apache.wolf.locator.data.Schema;
 import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
 import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.partition.IPartitioner;
+import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +33,7 @@ public class DatabaseDescriptor {
 	private static IEndpointSnitch snitch;
 	private static IPartitioner partitioner;
 	public static final String SNAPSHOT_SUBDIR_NAME = "snapshots";
+	private static InetAddress rpcAddress;
 	
     public static void initDefaultsOnly()
     {
@@ -69,6 +73,16 @@ public class DatabaseDescriptor {
 				}
 			}
 			
+			if(conf.getRpc_address()!=null){
+				try{
+					rpcAddress=InetAddress.getByName(conf.getRpc_address());
+				}catch(UnknownHostException e){
+					
+				}
+			}else{
+				rpcAddress=ConfFBUtilities.getLocalAddress();
+			}
+			
 			if(conf.getPartitioner()==null){
 				throw new ConfigurationException("Missing directive:partitioner");
 			}
@@ -83,6 +97,9 @@ public class DatabaseDescriptor {
 			}
 			snitch=CreateEndpointSnitch(conf.getEndpoint_snitch());
 			EndpointSnitchInfo.create();
+			
+			KSMetaData systemMeta=KSMetaData.systemKeyspace();
+			Schema.instance.addSystemTable(systemMeta);
 			
 		}catch(ConfigurationException e){
 			logger.error("Fatal configuration error",e);
@@ -173,5 +190,13 @@ public class DatabaseDescriptor {
 
 	public static IPartitioner getPartitioner() throws ConfigurationException {
 		return partitioner;
+	}
+
+	public static int getRpcPort() {
+		return conf.getRpc_port();
+	}
+
+	public static InetAddress getRpcAddress() {
+		return rpcAddress;
 	}
 }

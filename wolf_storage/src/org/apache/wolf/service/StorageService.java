@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.naming.ConfigurationException;
 
 import org.apache.wolf.gossip.message.handler.GossipDigestSynVerbHandler;
+import org.apache.wolf.locator.token.TokenMetadata;
 import org.apache.wolf.message.MessageVerb;
 import org.apache.wolf.message.handler.HandlerTest;
 import org.apache.wolf.util.ConfFBUtilities;
@@ -17,6 +18,7 @@ public class StorageService {
 	private static final int RING_DELAY = 10;
 	private boolean initialized;
 	private boolean isClientMode;
+	private TokenMetadata tokenMetadata_=new TokenMetadata();
 
 	public boolean isInitialized() {
 		return initialized;
@@ -56,6 +58,10 @@ public class StorageService {
 
 	private void joinTokenRing(int delay) throws ConfigurationException, IOException {
 		MessageService.instance.listen(ConfFBUtilities.getLocalAddress());
+	}
+
+	public TokenMetadata getTokenMetadata() {
+		return tokenMetadata_;
 	}
 
 }

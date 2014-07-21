@@ -4,10 +4,13 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.wolf.DhtService;
+import org.apache.wolf.locator.strategy.AbstractReplicationStrategy;
 import org.apache.wolf.token.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ public class TokenMetadata {
 	@SuppressWarnings("rawtypes")
 	private ArrayList<Token> sortedTokens;
 	private final ReadWriteLock lock=new ReentrantReadWriteLock(true);
+	private final CopyOnWriteArrayList<AbstractReplicationStrategy> subscribers=new CopyOnWriteArrayList<AbstractReplicationStrategy>();
 	@SuppressWarnings("rawtypes")
 	public static Token firstToken(final ArrayList<Token> ring,Token start){
 		return DhtService.firstToken(ring, start);
@@ -131,5 +135,9 @@ public class TokenMetadata {
 		}finally{
 			lock.writeLock().unlock();
 		}
+	}
+
+	public void unregister(AbstractReplicationStrategy subscriber) {
+		subscribers.remove(subscriber);
 	}
 }

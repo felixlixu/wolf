@@ -1,8 +1,13 @@
 package org.apache.wolf.service;
 
-public class WolfServiceDaemon extends AbstractWolfServiceDaemon {
+import org.slf4j.LoggerFactory;
 
+public class WolfServiceDaemon extends AbstractWolfServiceDaemon {
+	
 	private static WolfServiceDaemon instance;
+	static{
+		AbstractWolfServiceDaemon.initLog4j();
+	}
 	
 	/**
 	 * @param args

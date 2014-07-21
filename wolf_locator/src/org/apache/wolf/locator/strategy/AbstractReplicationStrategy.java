@@ -1,9 +1,12 @@
 package org.apache.wolf.locator.strategy;
 
+import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+
+import javax.naming.ConfigurationException;
 
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.locator.token.TokenMetadata;
@@ -51,4 +54,21 @@ public abstract class AbstractReplicationStrategy {
 			return null;
 		return cachedEndpoints.get(keyToken);
 	}
+
+	public static AbstractReplicationStrategy createReplicationStrategy(String table,
+			Class<? extends AbstractReplicationStrategy> strategyClass,
+			TokenMetadata tokenMetadata, IEndpointSnitch snitch,
+			Map<String, String> strategyOptions) {
+		AbstractReplicationStrategy strategy;
+		Class[] parameterTypes=new Class[]{String.class,TokenMetadata.class,IEndpointSnitch.class,Map.class};
+		try{
+			Constructor<? extends AbstractReplicationStrategy> constructor=strategyClass.getConstructor(parameterTypes);
+			strategy=constructor.newInstance(table,tokenMetadata,snitch,strategyOptions);
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}
+		return strategy;
+	}
+
+	public abstract void validateOptions() throws ConfigurationException;
 }

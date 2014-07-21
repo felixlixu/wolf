@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.ConfigurationException;
+
 import org.apache.wolf.locator.token.TokenMetadata;
 import org.apache.wolf.token.Token;
 
@@ -63,6 +65,12 @@ public class OldNetworkTopologyStrategy extends AbstractReplicationStrategy {
 
 	private int getReplicationFactor() {
 		return Integer.parseInt(this.configOptions.get("replication_factor"));
+	}
+
+	@Override
+	public void validateOptions() throws ConfigurationException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
