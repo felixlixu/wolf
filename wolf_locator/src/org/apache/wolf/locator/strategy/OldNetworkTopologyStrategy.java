@@ -9,14 +9,15 @@ import java.util.Map;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.dht.token.Token;
+import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.locator.token.TokenMetadata;
-import org.apache.wolf.token.Token;
 
 public class OldNetworkTopologyStrategy extends AbstractReplicationStrategy {
 
-	public OldNetworkTopologyStrategy(TokenMetadata metadata,
-			Map<String, String> configOptions) {
-		super(metadata, configOptions);
+	public OldNetworkTopologyStrategy(String table,TokenMetadata metadata,
+			IEndpointSnitch snitch,Map<String, String> configOptions) {
+		super(table,metadata, snitch,configOptions);
 	}
 
 	@Override

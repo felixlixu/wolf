@@ -6,8 +6,9 @@ import javax.naming.ConfigurationException;
 
 import org.apache.wolf.gossip.message.handler.GossipDigestSynVerbHandler;
 import org.apache.wolf.locator.token.TokenMetadata;
-import org.apache.wolf.message.MessageVerb;
+import org.apache.wolf.message.MessageService;
 import org.apache.wolf.message.handler.HandlerTest;
+import org.apache.wolf.message.msg.MessageVerb;
 import org.apache.wolf.util.ConfFBUtilities;
 
 

@@ -1,7 +1,7 @@
 package org.apache.wolf.gossip.message.handler;
 
-import org.apache.wolf.message.Message;
 import org.apache.wolf.message.handler.IVerbHandler;
+import org.apache.wolf.message.msg.Message;
 
 public class GossipDigestSynVerbHandler implements IVerbHandler {
 

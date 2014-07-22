@@ -7,4 +7,9 @@ seeds:
  - localhost
 endpoint_snitch: org.apache.wolf.locator.snitch.SimpleSnitch
 cluster_name: test
-partitioner: org.apache.wolf.partition.OrderPreservingPartitioner
+partitioner: org.apache.wolf.dht.partition.OrderPreservingPartitioner
+data_file_directories: 
+  - D:\SHDownload\FILE1
+  - D:\SHDownload\FILE2
+commitlog_directory: D:\SHDownload\COMMILT
+saved_caches_directory: D:\SHDownload\CACHE

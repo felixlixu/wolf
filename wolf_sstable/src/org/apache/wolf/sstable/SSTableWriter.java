@@ -11,13 +11,14 @@ import java.util.Set;
 import javax.naming.ConfigurationException;
 
 import org.apache.wolf.conf.DatabaseDescriptor;
+import org.apache.wolf.dht.partition.IPartitioner;
+import org.apache.wolf.dht.token.DecoratedKey;
 import org.apache.wolf.io.util.SequentialWriter;
-import org.apache.wolf.locator.data.CFMetaData;
-import org.apache.wolf.partition.IPartitioner;
+import org.apache.wolf.metadata.CFMetaData;
+import org.apache.wolf.metadata.Schema;
 import org.apache.wolf.sstable.data.Collector;
 import org.apache.wolf.sstable.data.Component;
 import org.apache.wolf.sstable.data.Descriptor;
-import org.apache.wolf.token.DecoratedKey;
 import org.apache.wolf.utils.ByteBufferUtil;
 
 public class SSTableWriter extends SSTable {
@@ -28,7 +29,7 @@ public class SSTableWriter extends SSTable {
 	public SSTableWriter(String filename, long keyCount) throws ConfigurationException, FileNotFoundException {
 		this(filename,
 			  keyCount,
-			  SSTableSchema.instance.getCFMetaData(Descriptor.fromFilename(filename)),
+			  Schema.instances.getCFMetaData(Descriptor.fromFilename(filename).ksname,Descriptor.fromFilename(filename).cfname),
 			  DatabaseDescriptor.getPartitioner(),
 			  SSTableMetadata.createCollector()
 			  );

@@ -1,7 +1,7 @@
 package org.apache.wolf.message.handler;
 
-import org.apache.wolf.message.Message;
-import org.apache.wolf.message.MessageVerb;
+import org.apache.wolf.message.msg.Message;
+import org.apache.wolf.message.msg.MessageVerb;
 import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

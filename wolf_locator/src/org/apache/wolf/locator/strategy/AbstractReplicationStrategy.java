@@ -8,10 +8,10 @@ import java.util.Map;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.dht.token.StringToken;
+import org.apache.wolf.dht.token.Token;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.locator.token.TokenMetadata;
-import org.apache.wolf.token.StringToken;
-import org.apache.wolf.token.Token;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 
 public abstract class AbstractReplicationStrategy {
@@ -23,9 +23,17 @@ public abstract class AbstractReplicationStrategy {
 	protected final Map<String,String> configOptions;
 	
 	protected IEndpointSnitch snitch;
+
+	private final String table;
 	
-	AbstractReplicationStrategy(TokenMetadata metadata,Map<String,String> configOptions){
+	AbstractReplicationStrategy(String table,TokenMetadata metadata,IEndpointSnitch snitch,Map<String,String> configOptions){
+		assert table!=null;
+		assert snitch!=null;
+		assert tokenMetadata!=null;
+		this.table=table;
+		this.snitch=snitch;
 		this.tokenMetadata=metadata;
+		this.tokenMetadata.register(this);
 		this.configOptions=configOptions;
 	}
 	

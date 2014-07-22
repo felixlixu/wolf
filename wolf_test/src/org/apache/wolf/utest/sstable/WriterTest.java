@@ -12,10 +12,10 @@ import java.util.Random;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.dht.token.DecoratedKey;
+import org.apache.wolf.dht.token.StringToken;
 import org.apache.wolf.io.util.SequentialWriter;
 import org.apache.wolf.sstable.SSTableWriter;
-import org.apache.wolf.token.DecoratedKey;
-import org.apache.wolf.token.StringToken;
 import org.apache.wolf.utils.ByteBufferUtil;
 import org.junit.Test;
 

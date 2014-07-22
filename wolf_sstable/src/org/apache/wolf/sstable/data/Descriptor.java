@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
-import org.apache.wolf.conf.Config;
 import org.apache.wolf.sstable.SSTable;
 import org.apache.wolf.utils.Pair;
+import org.apache.wolf.utils.StaticField;
 
 import static org.apache.wolf.sstable.data.Component.separator;
 
@@ -128,7 +128,7 @@ public class Descriptor {
 	private static boolean isSnapshotInPath(File directory) {
 		File curDirectory=directory;
 		while(curDirectory!=null){
-			if(curDirectory.getName().equals(Config.SNAPSHOT_SUBDIR_NAME)){
+			if(curDirectory.getName().equals(StaticField.SNAPSHOT_SUBDIR_NAME)){
 				return true;
 			}
 			curDirectory=curDirectory.getParentFile();

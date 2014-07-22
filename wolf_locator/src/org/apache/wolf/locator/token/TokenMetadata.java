@@ -9,9 +9,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.apache.wolf.DhtService;
+import org.apache.wolf.dht.DhtService;
+import org.apache.wolf.dht.token.Token;
 import org.apache.wolf.locator.strategy.AbstractReplicationStrategy;
-import org.apache.wolf.token.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -139,5 +139,9 @@ public class TokenMetadata {
 
 	public void unregister(AbstractReplicationStrategy subscriber) {
 		subscribers.remove(subscriber);
+	}
+
+	public void register(AbstractReplicationStrategy subscriber) {
+		subscribers.add(subscriber);
 	}
 }

@@ -6,14 +6,14 @@ import java.util.Map;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.dht.token.Token;
+import org.apache.wolf.locator.snitch.IEndpointSnitch;
 import org.apache.wolf.locator.token.TokenMetadata;
-import org.apache.wolf.token.Token;
 
 public class LocalStrategy extends AbstractReplicationStrategy {
 
-	LocalStrategy(TokenMetadata metadata, Map<String, String> configOptions) {
-		super(metadata, configOptions);
-		// TODO Auto-generated constructor stub
+	public LocalStrategy(String table,TokenMetadata metadata,IEndpointSnitch snitch,Map<String, String> configOptions) {
+		super(table,metadata,snitch,configOptions);
 	}
 
 	@Override

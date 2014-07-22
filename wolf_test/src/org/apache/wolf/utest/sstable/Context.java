@@ -10,11 +10,11 @@ import java.util.TreeMap;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.wolf.dht.token.DecoratedKey;
 import org.apache.wolf.sstable.SSTableReader;
 import org.apache.wolf.sstable.SSTableWriter;
 import org.apache.wolf.sstable.data.Component;
 import org.apache.wolf.sstable.data.Descriptor;
-import org.apache.wolf.token.DecoratedKey;
 public class Context {
 
 	private String cfname="Keyspace1";

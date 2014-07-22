@@ -5,11 +5,11 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.wolf.gossip.GossiperServiceProducer;
 import org.apache.wolf.gossip.state.ApplicationState;
 import org.apache.wolf.gossip.state.EndpointState;
 import org.apache.wolf.gossip.state.HeartBeatState;
 import org.apache.wolf.gossip.state.VersionedValue;
+import org.apache.wolf.produce.GossiperServiceProducer;
 import org.apache.wolf.serialize.IVersionedSerializer;
 
 public class EndpointSerializer implements IVersionedSerializer<EndpointState> {

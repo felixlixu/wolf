@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.wolf.message.Header;
+import org.apache.wolf.message.msg.Header;
 import org.apache.wolf.message.producer.MessageServiceProducer;
 import org.apache.wolf.serialize.IVersionedSerializer;
 

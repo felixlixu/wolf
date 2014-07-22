@@ -7,15 +7,17 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.naming.ConfigurationException;
 
-import org.apache.wolf.locator.data.KSMetaData;
-import org.apache.wolf.locator.data.Schema;
+import org.apache.wolf.dht.partition.IPartitioner;
+import org.apache.wolf.locator.db.migration.Migration;
 import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
 import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
-import org.apache.wolf.partition.IPartitioner;
+import org.apache.wolf.metadata.KSMetaData;
+import org.apache.wolf.metadata.Schema;
 import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.FBUtilities;
 import org.slf4j.Logger;
@@ -97,9 +99,8 @@ public class DatabaseDescriptor {
 			}
 			snitch=CreateEndpointSnitch(conf.getEndpoint_snitch());
 			EndpointSnitchInfo.create();
-			
 			KSMetaData systemMeta=KSMetaData.systemKeyspace();
-			Schema.instance.addSystemTable(systemMeta);
+			Schema.instances.addSystemTable(systemMeta);
 			
 		}catch(ConfigurationException e){
 			logger.error("Fatal configuration error",e);
@@ -198,5 +199,21 @@ public class DatabaseDescriptor {
 
 	public static InetAddress getRpcAddress() {
 		return rpcAddress;
+	}
+
+	public static String[] getAllDataFileLocations() {
+		return conf.getData_file_directories();
+	}
+
+	public static String getCommitLogLocation() {
+		return conf.getCommitlog_directory();
+	}
+
+	public static String getSavedCachesLocation() {
+		return conf.getSaved_caches_directory();
+	}
+
+	public static void loadSchemas() {
+		UUID uuid=Migration.getLastMigrationId();
 	}
 }

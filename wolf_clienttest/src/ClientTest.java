@@ -1,4 +1,4 @@
-import org.apache.wolf.service.GossipService;
+import org.apache.wolf.gossip.GossipService;
 
 
 public class ClientTest {

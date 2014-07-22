@@ -2,7 +2,7 @@ package org.apache.wolf.conf;
 
 public class Config {
 	
-	public static String SNAPSHOT_SUBDIR_NAME="snapshots";
+	private  String[] data_file_directories;
 	private String listen_address;
 	private String storage_port;
 	private String rpc_Timeout;
@@ -15,6 +15,8 @@ public class Config {
 	private String partitioner;
 	private int rpc_port;
 	private String rpc_address;
+	private String commitlog_directory;
+	private String saved_caches_directory;
 
 	public Config(){}
 
@@ -105,5 +107,30 @@ public class Config {
 	public void setRpc_address(String rpc_address) {
 		this.rpc_address = rpc_address;
 	}
+
+	public String[] getData_file_directories() {
+		return data_file_directories;
+	}
+
+	public void setData_file_directories(String[] data_file_directories) {
+		this.data_file_directories = data_file_directories;
+	}
+
+	public String getCommitlog_directory() {
+		return commitlog_directory;
+	}
+
+	public void setCommitlog_directory(String commitlog_directory) {
+		this.commitlog_directory = commitlog_directory;
+	}
+
+	public String getSaved_caches_directory() {
+		return saved_caches_directory;
+	}
+
+	public void setSaved_caches_directory(String saved_caches_directory) {
+		this.saved_caches_directory = saved_caches_directory;
+	}
+
 
 }
