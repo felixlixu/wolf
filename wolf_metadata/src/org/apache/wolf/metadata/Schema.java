@@ -4,13 +4,23 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.naming.ConfigurationException;
+
+import org.apache.wolf.utils.Pair;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class Schema {
 
 	private volatile UUID version;
 	
 	private final Map<String,KSMetaData> tables=new NonBlockingHashMap<String,KSMetaData>();
+	
+	private static final Logger logger = LoggerFactory.getLogger(Schema.class);
 	
 	public Schema(UUID initialVersion) {
 		version=initialVersion;
@@ -19,6 +29,8 @@ public class Schema {
 	public static final UUID INITIAL_VERSION = new UUID(4096, 0);
 
 	public static Schema instances=new Schema(INITIAL_VERSION);
+	
+	private final BiMap<Pair<String,String>,Integer> cfIdMap=HashBiMap.create();
 
 	public void addSystemTable(KSMetaData systemTable) {
 		tables.put(systemTable.getName(),systemTable);
@@ -44,5 +56,14 @@ public class Schema {
 
 	public KSMetaData getTableDefinition(String table) {
 		return getKSMetaData(table);
+	}
+
+	public void load(CFMetaData cfm) throws ConfigurationException {
+		Pair<String,String> key=new Pair<String,String>(cfm.getKsName(),cfm.getCfName());
+		if(cfIdMap.containsKey(key)){
+			throw new ConfigurationException("Attempt to assign id to existing column family.");
+		}
+		logger.debug("Adding {} to cfIdMap",cfm);
+		cfIdMap.put(key, cfm.getCfId());
 	}
 }

@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import javax.naming.ConfigurationException;
 
-import org.apache.db.type.BytesType;
+import org.apache.wolf.db.type.BytesType;
 import org.apache.wolf.utils.ByteBufferUtil;
 import org.apache.wolf.utils.StaticField;
 
@@ -15,7 +15,7 @@ public class SystemTable {
 
 	private static final ByteBuffer CLUSTERNAME=ByteBufferUtil.bytes("ClusterName");
 
-	public static int incrementAndGetGeneration() throws IOException{
+	public static int incrementAndGetGeneration() throws IOException, ConfigurationException{
 		Table table=Table.open(StaticField.SYSTEMTABLE);
 		return 0;
 	}

@@ -1,5 +1,6 @@
 package org.apache.wolf.sstable;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import org.apache.wolf.sstable.data.Collector;
 import org.apache.wolf.sstable.data.Component;
 import org.apache.wolf.sstable.data.Descriptor;
 import org.apache.wolf.sstable.data.Type;
+import org.apache.wolf.utils.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,18 @@ public abstract class SSTable {
 	
 	protected String getFilename() {
 		return descriptor.filenameFor(COMPONENT_DATA);
+	}
+
+	public static Pair<Descriptor, Component> tryComponentFromFilename(
+			File dir, String name) {
+		try{
+			return Component.fromFilename(dir,name);
+		}catch(Exception e){
+            if (!"snapshots".equals(name) && !"backups".equals(name)
+                    && !name.contains(".json"))
+                logger.warn("Invalid file '{}' in data directory {}.", name, dir);
+            return null;
+		}
 	}
 	
 }

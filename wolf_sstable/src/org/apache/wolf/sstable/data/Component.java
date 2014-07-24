@@ -1,5 +1,9 @@
 package org.apache.wolf.sstable.data;
 
+import java.io.File;
+
+import org.apache.wolf.utils.Pair;
+
 import com.google.common.base.Objects;
 
 
@@ -26,6 +30,19 @@ public class Component {
 
 	public String name() {
 		return type.repr;
+	}
+
+	public static Pair<Descriptor, Component> fromFilename(File dir, String name) {
+		Pair<Descriptor,String> path=Descriptor.fromFilename(dir,name);
+		Type type=Type.fromRepresentation(path.right);
+		Component component=null;
+		System.out.println("The file type is "+path.right);
+		switch(type){
+			case DATA:		component=Component.DATA;	break;
+			default:
+				throw new IllegalStateException();
+		}
+		return new Pair<Descriptor,Component>(path.left,component);
 	}
     
 

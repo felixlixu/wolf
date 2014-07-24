@@ -1,14 +1,18 @@
 package org.apache.wolf.metadata;
 
-import org.apache.db.type.AbstractType;
-import org.apache.db.type.BytesType;
-import org.apache.db.type.ColumnFamilyType;
+import org.apache.wolf.db.type.AbstractType;
+import org.apache.wolf.db.type.BytesType;
+import org.apache.wolf.db.type.ColumnFamilyType;
+import org.apache.wolf.db.type.UTF8Type;
+import org.apache.wolf.utils.StaticField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CFMetaData {
 
 	private static Logger logger=LoggerFactory.getLogger(CFMetaData.class);
+
+	public static CFMetaData VersionCf=newSystemMetadata(StaticField.VERSION_CF,7,"server version information",UTF8Type.instance,null);
 	
 	private String comment;
 	private double readRepairChance;
@@ -100,6 +104,10 @@ public class CFMetaData {
 
 	public Integer getCfId() {
 		return cfId;
+	}
+
+	public String getKsName() {
+		return ksName;
 	}
 
 }

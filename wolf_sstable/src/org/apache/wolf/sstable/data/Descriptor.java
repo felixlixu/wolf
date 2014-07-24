@@ -91,7 +91,7 @@ public class Descriptor {
 		return fromFilename(file.getParentFile(),file.getName()).left;
 	}
 
-	private static Pair<Descriptor,String> fromFilename(File directory, String name) {
+	static Pair<Descriptor,String> fromFilename(File directory, String name) {
 		String ksname=extractKeyspaceName(directory);
 		StringTokenizer st=new StringTokenizer(name,String.valueOf(separator));
 		String nexttok;
@@ -134,5 +134,9 @@ public class Descriptor {
 			curDirectory=curDirectory.getParentFile();
 		}
 		return false;
+	}
+
+	public boolean isCompatible() {
+		return version.charAt(0)<=CURRENT_VERSION.charAt(0);
 	}
 }

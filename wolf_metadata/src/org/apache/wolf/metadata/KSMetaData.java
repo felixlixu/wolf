@@ -33,7 +33,7 @@ public class KSMetaData {
 	}
 
 	public static KSMetaData systemKeyspace(){
-		List<CFMetaData> cfDefs=Arrays.asList();
+		List<CFMetaData> cfDefs=Arrays.asList(CFMetaData.VersionCf);
 		return new KSMetaData(StaticField.SYSTEMTABLE,LocalStrategy.class,optsWithRF(1),true,cfDefs);
 	}
 	

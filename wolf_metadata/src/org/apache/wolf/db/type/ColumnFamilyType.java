@@ -1,4 +1,4 @@
-package org.apache.db.type;
+package org.apache.wolf.db.type;
 
 public enum ColumnFamilyType {
 

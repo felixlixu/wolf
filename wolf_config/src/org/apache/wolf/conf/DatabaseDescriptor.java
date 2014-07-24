@@ -1,5 +1,6 @@
 package org.apache.wolf.conf;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -16,6 +17,7 @@ import org.apache.wolf.locator.db.migration.Migration;
 import org.apache.wolf.locator.snitch.DynamicEndpointSnitch;
 import org.apache.wolf.locator.snitch.EndpointSnitchInfo;
 import org.apache.wolf.locator.snitch.IEndpointSnitch;
+import org.apache.wolf.metadata.CFMetaData;
 import org.apache.wolf.metadata.KSMetaData;
 import org.apache.wolf.metadata.Schema;
 import org.apache.wolf.util.ConfFBUtilities;
@@ -100,6 +102,7 @@ public class DatabaseDescriptor {
 			snitch=CreateEndpointSnitch(conf.getEndpoint_snitch());
 			EndpointSnitchInfo.create();
 			KSMetaData systemMeta=KSMetaData.systemKeyspace();
+			Schema.instances.load(CFMetaData.VersionCf);
 			Schema.instances.addSystemTable(systemMeta);
 			
 		}catch(ConfigurationException e){
@@ -205,7 +208,7 @@ public class DatabaseDescriptor {
 		return conf.getData_file_directories();
 	}
 
-	public static String getCommitLogLocation() {
+ 	public static String getCommitLogLocation() {
 		return conf.getCommitlog_directory();
 	}
 
@@ -215,5 +218,13 @@ public class DatabaseDescriptor {
 
 	public static void loadSchemas() {
 		UUID uuid=Migration.getLastMigrationId();
+	}
+
+	public static String[] getAllDataFileLocationsForTable(String name) {
+		String[] tableLocations=new String[conf.getData_file_directories().length];
+		for(int i=0;i<conf.getData_file_directories().length;i++){
+			tableLocations[i]=conf.getData_file_directories()[i]+File.separator+name;
+		}
+		return tableLocations;
 	}
 }

@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.ConfigurationException;
 
+import org.apache.db.column.storge.ColumnFamilyStoreService;
 import org.apache.wolf.conf.DatabaseDescriptor;
 import org.apache.wolf.io.util.FileUtils;
 import org.apache.wolf.locator.strategy.AbstractReplicationStrategy;
@@ -21,10 +24,11 @@ import org.slf4j.LoggerFactory;
 public class Table {
 	private String name;
 	private volatile AbstractReplicationStrategy replicationStrategy;
+	private final Map<Integer,ColumnFamilyStoreService> columnFamilyStores=new ConcurrentHashMap<Integer,ColumnFamilyStoreService>();
 	private  static Logger logger=LoggerFactory.getLogger(Table.class);
 
-	public Table(String table) {
-		name=table;
+	public Table(String table) throws ConfigurationException {
+		setName(table);
 		KSMetaData ksm=DBSchema.instance.Schemainstance.getKSMetaData(table);
 		assert ksm!=null :"Unknow keyspace :" +table;
 		try{
@@ -47,14 +51,14 @@ public class Table {
 		}
 		
 		for(CFMetaData cfm:new ArrayList<CFMetaData>(Schema.instances.getTableDefinition(table).cfMetaData().values())){
-			logger.debug("Initializing {} {} ",name,cfm.getCfName());
+			logger.debug("Initializing {} {} ",getName(),cfm.getCfName());
 			initCf(cfm.getCfId(),cfm.getCfName());
 		}
 	}
 
-	private void initCf(Integer cfId, String cfName) {
-		// TODO Auto-generated method stub
-		
+	private void initCf(Integer cfId, String cfName) throws ConfigurationException {
+		assert !columnFamilyStores.containsKey(cfId):String.format("tried to init %s as %s,but already useed by %s", cfName,cfId,columnFamilyStores.get(cfId));
+		columnFamilyStores.put(cfId, ColumnFamilyStoreService.createColumnFamilyStore(this,cfName));
 	}
 
 	public void createReplicationStrategy(KSMetaData ksm) throws ConfigurationException {
@@ -68,11 +72,11 @@ public class Table {
 		replicationStrategy.validateOptions();
 	}
 
-	public static Table open(String table) {
+	public static Table open(String table) throws ConfigurationException {
 		return open(table,DBSchema.instance);
 	}
 
-	private static Table open(String table, DBSchema schema) {
+	private static Table open(String table, DBSchema schema) throws ConfigurationException {
 		Table tableinstance=schema.getTableInstance(table);
 		if(tableinstance==null){
 			synchronized(Table.class){
@@ -83,6 +87,14 @@ public class Table {
 			}
 		}
 		return tableinstance;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
