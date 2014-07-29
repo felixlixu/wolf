@@ -9,6 +9,7 @@ import javax.naming.ConfigurationException;
 import org.apache.db.column.storge.ColumnFamilyStoreService;
 import org.apache.db.struct.DBSchema;
 import org.apache.db.struct.SystemTable;
+import org.apache.db.struct.Table;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.wolf.cache.service.CacheService;
 import org.apache.wolf.conf.DatabaseDescriptor;
@@ -49,7 +50,7 @@ public abstract class AbstractWolfServiceDaemon implements IWolfServiceDaemon {
 		
 	}
 
-	private void setup() {
+	private void setup() throws ConfigurationException {
 		log.info("JVM vendor/version: {}/{}", System.getProperty("java.vm.name"), System.getProperty("java.version") );
 		log.info("Heap size: {}/{}", Runtime.getRuntime().totalMemory(), Runtime.getRuntime().maxMemory());
 		log.info("Classpath: {}", System.getProperty("java.class.path"));
@@ -98,6 +99,19 @@ public abstract class AbstractWolfServiceDaemon implements IWolfServiceDaemon {
             System.exit(100);
         }
 		DatabaseDescriptor.loadSchemas();
+		for(String table:Schema.instances.getTables()){
+			for(CFMetaData cfm:Schema.instances.getTableMetaData(table).values()){
+				ColumnFamilyStoreService.scrubDataDirectories(table, cfm.getCfName());
+			}
+		}
+		
+		for(String table:Schema.instances.getTables()){
+            if (log.isDebugEnabled())
+                log.debug("opening keyspace " + table);
+            Table.open(table);
+		}
+		
+		
 		StorageService.instance.initServer();
 	}
 

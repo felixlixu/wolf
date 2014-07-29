@@ -39,7 +39,10 @@ public class CFMetaData {
 
 	private final static double DEFAULT_MERGE_SHARDS_CHANCE=0.1;
 
-	private boolean replicateOnWrite; 
+	private boolean replicateOnWrite;
+	private int minCompactionThreshlod;
+
+	private int maxCompactionThreshold;
 	
 	public CFMetaData(String keyspace, String cfname, ColumnFamilyType type,
 			AbstractType comparators, AbstractType subcc, int cfld) {
@@ -108,6 +111,14 @@ public class CFMetaData {
 
 	public String getKsName() {
 		return ksName;
+	}
+
+	public int getMinCompactionThreshold() {
+		return minCompactionThreshlod;
+	}
+
+	public int getMaxCompactionThreshold() {
+		return maxCompactionThreshold;
 	}
 
 }

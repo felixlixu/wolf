@@ -1,6 +1,7 @@
 package org.apache.wolf.conf;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -218,6 +219,30 @@ public class DatabaseDescriptor {
 
 	public static void loadSchemas() {
 		UUID uuid=Migration.getLastMigrationId();
+		if(uuid==null){
+			logger.info("Couldn't detect and schema definitions in local storage.");
+			boolean hasExistingTables=false;
+			for(String dataDir:getAllDataFileLocations()){
+                File dataPath = new File(dataDir);
+                if (dataPath.exists() && dataPath.isDirectory())
+                {
+                    // see if there are other directories present.
+                    int dirCount = dataPath.listFiles(new FileFilter()
+                    {
+                        public boolean accept(File pathname)
+                        {
+                            return pathname.isDirectory();
+                        }
+                    }).length;
+                    if (dirCount > 0)
+                        hasExistingTables = true;
+                }
+                if (hasExistingTables)
+                {
+                    break;
+                }
+			}
+		}
 	}
 
 	public static String[] getAllDataFileLocationsForTable(String name) {

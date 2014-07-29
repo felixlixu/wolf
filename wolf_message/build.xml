@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     2014-7-29 上午10:59:01                                                        
+
+     project    
+     description
+                   
+     P0017359                                                                
+     ====================================================================== -->
+<project name="wolf_message" default="deploy" basedir="." >
+    <description>
+            description
+    </description>
+	
+	<property name="src.dir" value="src"/>
+	<property name="build.dir" value="build"/>
+	<property name="version" value="1.0"/>
+	<property name="class.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir" value="${build.dir}/jar"/>
+	<property name="fullname" value="${ant.project.name}-${version}"/>
+	<property name="deploy.jar" value="../build"/>
+	
+	<path id="project.classpath">
+	    <fileset dir="${basedir}/../lib">   
+	        <include name="**/*.jar"/>   
+	    </fileset>
+		<fileset dir="${deploy.jar}">
+			<include name="wolf_config**.jar" />
+			<include name="wolf_utility**.jar"/>
+			<include name="wolf_serializer**.jar"/>
+			<include name="wolf_concurrent**.jar"/>
+		</fileset>
+	</path>
+
+
+
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="compile" description="description">
+		<delete dir="${class.dir}"></delete>
+    	<mkdir dir="${class.dir}"/>
+    	<echo message="project.classpath"></echo>
+    	<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
+    		<classpath refid="project.classpath"></classpath>
+    	</javac>
+    </target>
+	
+	<!-- ================================= 
+          target: jar              
+         ================================= -->
+    <target name="jar" depends="compile" description="description">
+        <mkdir dir="${jar.dir}"/>
+    	<jar destfile="${jar.dir}/${fullname}.jar" basedir="${class.dir}"></jar>
+    </target>
+
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="deploy" depends="jar">
+    	<copy file="${jar.dir}/${fullname}.jar" todir="${deploy.jar}"></copy>
+    </target>
+	
+	<target name="clean">
+		<delete file="${deploy.jar}/${fullname}.jar" />
+	</target>
+
+</project>
+

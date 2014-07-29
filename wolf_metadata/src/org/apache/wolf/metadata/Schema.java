@@ -2,6 +2,7 @@ package org.apache.wolf.metadata;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.naming.ConfigurationException;
@@ -65,5 +66,9 @@ public class Schema {
 		}
 		logger.debug("Adding {} to cfIdMap",cfm);
 		cfIdMap.put(key, cfm.getCfId());
+	}
+
+	public Set<String> getTables() {
+		return tables.keySet();
 	}
 }
