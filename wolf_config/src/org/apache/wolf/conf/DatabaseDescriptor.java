@@ -252,4 +252,12 @@ public class DatabaseDescriptor {
 		}
 		return tableLocations;
 	}
+
+	public static int getThriftMaxMessageLength() {
+		return conf.getThrift_max_messagelength();
+	}
+
+	public static int getThriftFramedTransportSize() {
+		return conf.getThrift_framed_transport_size()*1024*1024;
+	}
 }

@@ -65,4 +65,9 @@ public class StorageService {
 		return tokenMetadata_;
 	}
 
+	public void initClient() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

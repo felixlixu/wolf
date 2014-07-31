@@ -17,6 +17,8 @@ public class Config {
 	private String rpc_address;
 	private String commitlog_directory;
 	private String saved_caches_directory;
+	private int thrift_max_messagelength;
+	private int thrift_framed_transport_size;
 
 	public Config(){}
 
@@ -130,6 +132,22 @@ public class Config {
 
 	public void setSaved_caches_directory(String saved_caches_directory) {
 		this.saved_caches_directory = saved_caches_directory;
+	}
+
+	public int getThrift_max_messagelength() {
+		return thrift_max_messagelength;
+	}
+
+	public void setThrift_max_messagelength(int thrift_max_messagelength) {
+		this.thrift_max_messagelength = thrift_max_messagelength;
+	}
+
+	public int getThrift_framed_transport_size() {
+		return thrift_framed_transport_size;
+	}
+
+	public void setThrift_framed_transport_size(int thrift_framed_transport_size) {
+		this.thrift_framed_transport_size = thrift_framed_transport_size;
 	}
 
 

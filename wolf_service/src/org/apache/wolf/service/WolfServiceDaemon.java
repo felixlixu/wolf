@@ -16,4 +16,15 @@ public class WolfServiceDaemon extends AbstractWolfServiceDaemon {
 		System.out.println("start success");
 	}
 
+	private ThriftServer server;
+
+	@Override
+	protected void startServer() {
+		System.out.println("Begin listen server");
+		if(server==null){
+			server=new ThriftServer(listenAddr,listenPort);
+			server.start();
+		}
+	}
+
 }

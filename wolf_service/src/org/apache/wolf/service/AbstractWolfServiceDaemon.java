@@ -28,6 +28,7 @@ public abstract class AbstractWolfServiceDaemon implements IWolfServiceDaemon {
 	private static Logger log=LoggerFactory.getLogger(AbstractWolfServiceDaemon.class);
 	protected int listenPort;
 	protected InetAddress listenAddr;
+	private boolean isRunning;
 	static final AtomicInteger exceptions=new AtomicInteger();
 	
 	public void activite() {
@@ -47,8 +48,17 @@ public abstract class AbstractWolfServiceDaemon implements IWolfServiceDaemon {
 	}
 
 	private void start() {
-		
+		startRPCServer();
 	}
+
+	private void startRPCServer() {
+		if(!isRunning){
+			startServer();
+			isRunning=true;
+		}
+	}
+
+	protected abstract void startServer();
 
 	private void setup() throws ConfigurationException {
 		log.info("JVM vendor/version: {}/{}", System.getProperty("java.vm.name"), System.getProperty("java.version") );
@@ -116,7 +126,6 @@ public abstract class AbstractWolfServiceDaemon implements IWolfServiceDaemon {
 	}
 
 	public static void initLog4j() {
-		String path=Class.class.getClass().getResource("/").getPath();
-		PropertyConfigurator.configure(path+"log4j.properties");
+		PropertyConfigurator.configure(AbstractWolfServiceDaemon.class.getClassLoader().getResource("log4j.properties"));
 	}
 }

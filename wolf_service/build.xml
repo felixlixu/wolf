@@ -29,13 +29,31 @@
 			<include name="wolf_storage**.jar"/>
 			<include name="wolf_locator**.jar"/>
 			<include name="wolf_io**.jar"/>
+			<include name="wolf_thrift**.jar"/>
 		</fileset>
 	</path>
 	
 	
     <target name="jar" depends="default" description="description">
         <mkdir dir="${jar.dir}"/>
-    	<jar destfile="${jar.dir}/${fullname1}.jar" basedir="${class.dir}"></jar>
+    	<jar destfile="${jar.dir}/${fullname1}.jar" basedir="${class.dir}">
+    		<manifest>
+    			<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
+    			<attribute name="Class-Path" 
+    				value="
+    					slf4j-log4j12-1.6.1.jar 
+    					slf4j-api-1.6.1.jar 
+    					log4j-1.2.16.jar 
+    					wolf_utility-1.0.jar 
+    					guava-r08.jar
+    					wolf_config-1.0.jar
+    					wolf_locator-1.0.jar
+    					snakeyaml-1.11.jar
+    					high-scale-lib-1.1.2.jar
+    					jna-3.2.7.jar
+    				" />
+    		</manifest>
+    	</jar>
     </target>
 	
    <target name="deploy" depends="jar">
@@ -47,16 +65,33 @@
 		</copy>
     </target>
 	
+	<!-- ================================= 
+          target: run              
+         ================================= -->
+    <target name="run" depends="deploy" description="description">
+        <java classname="org.apache.wolf.service.WolfServiceDaemon">
+        	<classpath>
+        		<path>
+        			<fileset dir="${deploy.jar}">
+        				<include name="**/*.*"/> 
+        			</fileset>
+        		</path>
+        	</classpath>
+        </java>
+    </target>
+
+	
     <!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="wolf_db,wolf_cache" description="description">
+    <target name="default" depends="wolf_db,wolf_cache,wolf_thrift" description="description">
         <echo message="构建子工程【wolf_service】"></echo>
 		<delete dir="${class.dir}"></delete>
     	<mkdir dir="${class.dir}"/>
     	<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
     		<classpath refid="project.classpath"></classpath>
     	</javac>
+    	<copy todir="${class.dir}" file="${src.dir}\log4j.properties"></copy>
     </target>
 	
 	<!-- ================================= 
@@ -173,6 +208,15 @@
     	<echo message="构建子工程 【wolf_cache】"></echo>
     	<ant dir="..\wolf_cache"></ant>          
     </target>
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: wolf_thrift                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="wolf_thrift">
+            <echo message="build wolf_thrift"></echo>
+    		<ant dir="..\wolf_thrift"></ant>
+    </target>
+
 
 
 
