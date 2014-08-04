@@ -16,10 +16,6 @@ public class StageManager {
 		stages.put(Stage.MUTATION, multiThreadedConfigurableStage(Stage.MUTATION,DatabaseDescriptor.getConcurrentWriters()));
 		stages.put(Stage.GOSSIP, new JMXEnabledThreadPoolExecutor(Stage.GOSSIP));
 	}
-	
-	public static ExecutorService getStage(Stage stage) {
-		return stages.get(stage);
-	}
 
 	private static ThreadPoolExecutor multiThreadedConfigurableStage(
 			Stage stage, int numberThreads) {
@@ -30,6 +26,10 @@ public class StageManager {
 					new NamedThreadFactory(stage.getJmxName()),
 					stage.getJmxType()
 				);
+	}
+
+	public static ThreadPoolExecutor getStage(Stage stage) {
+		return stages.get(stage);
 	}
   
 }

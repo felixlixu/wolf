@@ -15,6 +15,9 @@ public class WolfServer implements Wolf.Iface {
 	@Override
 	public void login(AuthenticationRequest auth_request)
 			throws AuthenticationException, AuthorizationException, TException {
+		if(auth_request!=null){
+			System.out.println("This is ture");
+		}
 		System.out.println("HelloWolrd.");
 	}
 
@@ -216,11 +219,14 @@ public class WolfServer implements Wolf.Iface {
 	}
 
 	@Override
-	public String system_add_keyspace(KsDef ks_def)
+	public synchronized String system_add_keyspace(KsDef ks_def)
 			throws InvalidRequestException, SchemaDisagreementException,
 			TException {
-		// TODO Auto-generated method stub
-		return null;
+		if(ks_def!=null){
+			System.out.println("This is true");
+		}
+		System.out.println("System begin set keyspace");
+		return "1";
 	}
 
 	@Override

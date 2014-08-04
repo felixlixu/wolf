@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -27,6 +28,7 @@ import org.apache.wolf.gossip.state.EndpointState;
 import org.apache.wolf.gossip.state.HeartBeatState;
 import org.apache.wolf.gossip.state.VersionedValue;
 import org.apache.wolf.io.util.FastByteArrayOutputStream;
+import org.apache.wolf.locator.snitch.IEndpointStateChangeSubscriber;
 import org.apache.wolf.message.MessageService;
 import org.apache.wolf.message.msg.IMessageProducer;
 import org.apache.wolf.message.msg.Message;
@@ -56,7 +58,8 @@ public class GossiperServiceProducer {
 	
 	public static GossiperServiceProducer instance=new GossiperServiceProducer();
 	public static final ApplicationState[] STATE = ApplicationState.values();;
-	public Set<InetAddress> liveEndpoints =  new ConcurrentSkipListSet<InetAddress>(inetcomparator);;
+	public Set<InetAddress> liveEndpoints =  new ConcurrentSkipListSet<InetAddress>(inetcomparator);
+	private List<IEndpointStateChangeSubscriber> subscribers=new CopyOnWriteArrayList<IEndpointStateChangeSubscriber>();
 	
 	
 	public void start(int gernerationNbr){
@@ -207,6 +210,10 @@ public class GossiperServiceProducer {
 		}else{
 			return v;
 		}
+	}
+	
+	public void register(IEndpointStateChangeSubscriber subscriber) {
+		subscribers.add(subscriber);
 	}
 
 	private class GossipTask implements Runnable {	

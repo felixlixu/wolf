@@ -15,6 +15,7 @@
 	<property name="jar.dir" value="${build.dir}/jar"/>
 	<property name="fullname1" value="${ant.project.name}-${version}"/>
 	<property name="deploy.jar" value="../build"/>
+	<property name="build.class.dir" value="../buildClass"/>
 	
 	<path id="project.classpath">
 	    <fileset dir="${basedir}/../lib">   
@@ -51,14 +52,34 @@
     					snakeyaml-1.11.jar
     					high-scale-lib-1.1.2.jar
     					jna-3.2.7.jar
+    					wolf_cache-1.0.jar
+    					wolf_metadata-1.0.jar
     				" />
     		</manifest>
     	</jar>
+    	<jar destfile="${build.class.dir}/${fullname1}.jar" basedir="${build.class.dir}">
+    		<manifest>
+    			<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
+    			<attribute name="Class-Path" value="slf4j-log4j12-1.6.1.jar slf4j-api-1.6.1.jar log4j-1.2.16.jar jna-3.2.7.jar snakeyaml-1.11.jar guava-r08.jar high-scale-lib-1.1.2.jar libthrift-0.6.jar" />
+    		</manifest>
+    	</jar>
+    	<delete>
+			<fileset dir="${build.class.dir}">
+			    <include name="**/*.*"/>
+				<exclude name="${fullname1}.jar"/>
+			</fileset>
+		</delete>
+
     </target>
 	
    <target name="deploy" depends="jar">
     	<copy file="${jar.dir}/${fullname1}.jar" todir="${deploy.jar}"></copy>
 		<copy todir="${deploy.jar}">
+		  <fileset dir="${basedir}/../lib">
+		   	<include name="**/*.jar"/> 
+		  </fileset>
+		</copy>
+		<copy todir="${build.class.dir}">
 		  <fileset dir="${basedir}/../lib">
 		   	<include name="**/*.jar"/> 
 		  </fileset>
@@ -92,6 +113,11 @@
     		<classpath refid="project.classpath"></classpath>
     	</javac>
     	<copy todir="${class.dir}" file="${src.dir}\log4j.properties"></copy>
+		<copy todir="${build.class.dir}">
+		  <fileset dir="${class.dir}">
+		   	<include name="**/*.*"/> 
+		  </fileset>
+		</copy>
     </target>
 	
 	<!-- ================================= 
@@ -226,6 +252,10 @@
 			<fileset dir="${deploy.jar}">
 			    <include name="**/*.jar"/>
 			</fileset>
+			<fileset dir="${build.class.dir}">
+				<include name="**/*.jar"/>
+			</fileset>
+
 		</delete>
 	</target>
 

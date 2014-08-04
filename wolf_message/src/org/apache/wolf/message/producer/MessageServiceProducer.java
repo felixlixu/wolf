@@ -74,6 +74,7 @@ public class MessageServiceProducer {
 			th.start();
 			socketThreads.add(th);
 		}
+		//listenGate.singalAll();
 	}
 	
 	public String sendRR(Message message,InetAddress to,IMessageCall cb,long timeout){
@@ -145,7 +146,10 @@ public class MessageServiceProducer {
 		if(logger.isTraceEnabled()){
 			logger.trace(ConfFBUtilities.getLocalAddress() + " sending " + message.getVerb() + " to " + id + "@" + to);
 		}
-		
+		if(message.getFrom().equals(to)){
+			receive(message,id);
+			return;
+		}
 		OutboundTcpConnection connection=getConnection(to,message);
 		connection.enqueue(message,id);
 	}

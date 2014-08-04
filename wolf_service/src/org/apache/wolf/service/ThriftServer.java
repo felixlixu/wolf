@@ -25,8 +25,8 @@ public class ThriftServer extends Thread {
 		final WolfServer wolfserver=new WolfServer();
 		Wolf.Processor processor=new Wolf.Processor(wolfserver);
 		
-		TProtocolFactory tprotocolFactory=new TBinaryProtocol.Factory(true,true,DatabaseDescriptor.getThriftMaxMessageLength());
-		
+		//TProtocolFactory tprotocolFactory=new TBinaryProtocol.Factory(true,true,DatabaseDescriptor.getThriftMaxMessageLength());
+		TProtocolFactory tprotocolFactory=new TBinaryProtocol.Factory(true, true);
 		int tFramedTransportSize=DatabaseDescriptor.getThriftFramedTransportSize();
 		TTransportFactory inTransportFactory=new TFramedTransport.Factory(tFramedTransportSize);
 		TTransportFactory outTransportFactory=new TFramedTransport.Factory(tFramedTransportSize);

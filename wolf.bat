@@ -28,7 +28,7 @@ popd
 if NOT DEFINED WOLF_MAIN set WOLF_MAIN=org.apache.wolf.service.WolfServiceDaemon
 if NOT DEFINED JAVA_HOME goto err
 
-set WOLF_CLASSPATH= %CLASSPATH% %WOLF_HOME%wolf\build
+set WOLF_CLASSPATH= %CLASSPATH% %WOLF_HOME%wolf\buildClass
 
 set JAVA_OPTS=-ea^
  -javaagent:"%WOLF_CLASSPATH%jamm-0.2.5.jar"^
@@ -38,8 +38,6 @@ echo %WOLF_CLASSPATH%
 :runDaemon
 echo Starting WolfServer
 "%JAVA_HOME%\bin\java"    -jar %WOLF_CLASSPATH%\wolf_service-1.0.jar  %WOLF_MAIN%
-
-
 
 goto finally
 

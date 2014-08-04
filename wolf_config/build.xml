@@ -19,7 +19,7 @@
 	<property name="jar.dir" value="${build.dir}/jar"/>
 	<property name="fullname" value="${ant.project.name}-${version}"/>
 	<property name="deploy.jar" value="../build"/>
-	
+	<property name="build.class.dir" value="../buildClass"/>
 	<path id="project.classpath">
 	    <fileset dir="${basedir}/../lib">   
 	        <include name="**/*.jar"/>   
@@ -45,6 +45,11 @@
     		<classpath refid="project.classpath"></classpath>
     	</javac>
     	<copy todir="${class.dir}" file="${src.dir}\wolf.yaml"></copy>
+		<copy todir="${build.class.dir}">
+		  <fileset dir="${class.dir}">
+		   	<include name="**/*.*"/> 
+		  </fileset>
+		</copy>
     </target>
 	
 	<!-- ================================= 

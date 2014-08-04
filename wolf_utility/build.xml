@@ -19,6 +19,8 @@
 	<property name="jar.dir" value="${build.dir}/jar"/>
 	<property name="fullname" value="${ant.project.name}-${version}"/>
 	<property name="deploy.jar" value="../build"/>
+	<property name="build.class.dir" value="../buildClass"/>
+
 	
 	<path id="project.classpath">
 	    <fileset dir="${basedir}/../lib">   
@@ -38,6 +40,11 @@
     	<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
     		<classpath refid="project.classpath"></classpath>
     	</javac>
+		<copy todir="${build.class.dir}">
+		  <fileset dir="${class.dir}">
+		   	<include name="**/*.class"/> 
+		  </fileset>
+		</copy>
     </target>
 	
 	<!-- ================================= 

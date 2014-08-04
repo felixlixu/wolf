@@ -88,4 +88,8 @@ public class FBUtilities {
 		}
 		return new Pair<BigInteger,Boolean>(midpoint,remainder);
 	}
+
+	public static RuntimeException unchecked(Exception e) {
+		return e instanceof RuntimeException?(RuntimeException) e:new RuntimeException(e);
+	}
 }
