@@ -38,16 +38,17 @@ public class ClientTest {
      */  
     public static void main(String[] args) throws Exception {  
         // TODO Auto-generated method stub  
-    	//startClient();
-    	//setupKeyspace(createConnection());
-		TSocket socket=new TSocket("localhost",9001);
+    	startClient();
+    	setupKeyspace(createConnection());
+    	
+		/*TSocket socket=new TSocket("localhost",9001);
 		TTransport trans=socket;
 		TProtocol protocol=new TBinaryProtocol(trans);
 		Wolf.Client client=new Wolf.Client(protocol);
 		trans.open();
-		/*AuthenticationRequest auth_request=new AuthenticationRequest();
+		AuthenticationRequest auth_request=new AuthenticationRequest();
 		Map<String, String> map = new HashMap<String, String>();
-		auth_request.credentials=map;*/
+		auth_request.credentials=map;
 		List<CfDef> cfDefList=new ArrayList<CfDef>();
 		CfDef columnFamily=new CfDef(KEYSPACE,COLUMN_FAMILY);
 		cfDefList.add(columnFamily);
@@ -56,7 +57,7 @@ public class ClientTest {
 		
 		//client.login(auth_request);
 		System.out.println(f);
-		trans.close();
+		trans.close();*/
     }
 
 	private static Wolf.Client createConnection() throws TTransportException {
@@ -70,10 +71,10 @@ public class ClientTest {
 		
 		try {
 			client.system_add_keyspace(new KsDef(KEYSPACE,"org.apache.wolf.locator.strategy.OldNetworkTopologyStrategy",cfDefList));
-			int magnitude=client.describe_ring(KEYSPACE).size();
+			//int magnitude=client.describe_ring(KEYSPACE).size();
 			//client
 			try{
-				Thread.sleep(1000*magnitude);
+				Thread.sleep(1000*50);
 			}catch(InterruptedException e){
 				throw new RuntimeException(e);
 			}

@@ -72,7 +72,7 @@
 		<delete dir="${build.class.dir}/org"></delete>
     </target>
 	
-   <target name="deploy" depends="jar">
+   <target name="deploy" depends="clean,jar">
     	<copy file="${jar.dir}/${fullname1}.jar" todir="${deploy.jar}"></copy>
 		<copy todir="${deploy.jar}">
 		  <fileset dir="${basedir}/../lib">

@@ -28,6 +28,7 @@ import org.apache.wolf.message.net.OutboundTcpConnectionPool;
 import org.apache.wolf.message.net.SocketThread;
 import org.apache.wolf.serialize.SerializerType;
 import org.apache.wolf.util.ConfFBUtilities;
+import org.apache.wolf.utils.SimpleCondition;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,8 @@ public class MessageServiceProducer {
 	private final NonBlockingHashMap<InetAddress,OutboundTcpConnectionPool> connectionManagers_=new NonBlockingHashMap<InetAddress,OutboundTcpConnectionPool>();
 	public static final MessageVerb[] VERBS=MessageVerb.values();
 	private List<SocketThread> socketThreads=Lists.newArrayList();
+
+	private final SimpleCondition listenGate;
 	private static AtomicInteger idGen=new AtomicInteger(0);
 
 	public static SerializerType serializerType_=SerializerType.BINARY;
@@ -61,6 +64,7 @@ public class MessageServiceProducer {
 	
 	public MessageServiceProducer(){
 		verbHandlers_=new EnumMap<MessageVerb,IVerbHandler>(MessageVerb.class);
+		listenGate=new SimpleCondition();
 	}
 	
 	public void registerVerbHandler(MessageVerb verb,IVerbHandler handler){
@@ -74,7 +78,8 @@ public class MessageServiceProducer {
 			th.start();
 			socketThreads.add(th);
 		}
-		//listenGate.singalAll();
+		listenGate.signalAll();
+		System.out.println("Gossip listen successfull");
 	}
 	
 	public String sendRR(Message message,InetAddress to,IMessageCall cb,long timeout){
@@ -168,8 +173,11 @@ public class MessageServiceProducer {
 	}
 
 	public void waitUntilListening() {
-		// TODO Auto-generated method stub
-		
+		try{
+			listenGate.await();
+		}catch(InterruptedException ie){
+			logger.debug("await interrupted");
+		}
 	}
 
 	public void sendOneWay(Message message, InetAddress to) {

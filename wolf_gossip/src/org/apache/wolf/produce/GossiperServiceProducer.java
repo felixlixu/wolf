@@ -78,6 +78,7 @@ public class GossiperServiceProducer {
                 GossiperServiceProducer.intervalInMillis,
                 GossiperServiceProducer.intervalInMillis,
                 TimeUnit.MILLISECONDS));
+        System.out.println("Gossip Start successful");
 	}
 	
 	
