@@ -1,12 +1,24 @@
 package org.apache.wolf.thrift;
 
+import java.io.IOException;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.naming.ConfigurationException;
+
+import org.apache.wolf.metadata.CFMetaData;
+import org.apache.wolf.thrift.CfDef;
 import org.apache.thrift.TException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WolfServer implements Wolf.Iface {
+
+	private static Logger logger=LoggerFactory.getLogger(WolfServer.class);
 
 	@Override
 	public void login(AuthenticationRequest auth_request) throws TException {
@@ -191,11 +203,34 @@ public class WolfServer implements Wolf.Iface {
 
 	@Override
 	public String system_add_keyspace(KsDef ks_def) throws TException {
-		if(ks_def!=null){
-			System.out.print("The arg is right.");
+		logger.debug("add_keyspace");
+		//state().hasKeyspaceSchemaAccess(Permission.WRITE);
+		//validateSchemaAgreement();
+		//ThriftValidation.validateKeyspaceNotYetExisting(ks_def.name);
+		for(CfDef cf:ks_def.cf_defs){
+			if(!cf.getKeyspace().equals(ks_def.getName())){
+				throw new InvalidRequestException("CfDef("+cf.getName()+") had a keypsace definition that did not match KsDef");
+			}
 		}
-		return "Hello World.";
+		try{
+			Collection<CFMetaData> cfdefs=new ArrayList<CFMetaData>(ks_def.cf_defs.size());
+			for(CfDef cf_def:ks_def.cf_defs){
+				cf_def.unsetId();
+				CFMetaData.addDefaultIndexNames(cf_def);
+			}
+		}catch(ConfigurationException e){
+			throw e;
+		}catch(IOException e){
+			throw e;
+		}
+		return "";
 	}
+
+	/*private ClientState state() {
+		SocketAddress remoteSocket=SocketSessionManagementService.remoteSocket.get();
+		
+		return null;
+	}*/
 
 	@Override
 	public String system_drop_keyspace(String keyspace) throws TException {
