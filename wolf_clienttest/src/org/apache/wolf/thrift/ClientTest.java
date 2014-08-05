@@ -45,17 +45,17 @@ public class ClientTest {
 		TProtocol protocol=new TBinaryProtocol(trans);
 		Wolf.Client client=new Wolf.Client(protocol);
 		trans.open();
-		AuthenticationRequest auth_request=new AuthenticationRequest();
+		/*AuthenticationRequest auth_request=new AuthenticationRequest();
 		Map<String, String> map = new HashMap<String, String>();
-		auth_request.credentials=map;
-		/*List<CfDef> cfDefList=new ArrayList<CfDef>();
+		auth_request.credentials=map;*/
+		List<CfDef> cfDefList=new ArrayList<CfDef>();
 		CfDef columnFamily=new CfDef(KEYSPACE,COLUMN_FAMILY);
 		cfDefList.add(columnFamily);
 		
 		String f=client.system_add_keyspace(new KsDef(KEYSPACE,"org.apache.wolf.locator.strategy.OldNetworkTopologyStrategy",cfDefList));
-		*/
-		client.login(auth_request);
-		System.out.println(1);
+		
+		//client.login(auth_request);
+		System.out.println(f);
 		trans.close();
     }
 

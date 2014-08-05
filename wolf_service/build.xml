@@ -60,16 +60,16 @@
     	<jar destfile="${build.class.dir}/${fullname1}.jar" basedir="${build.class.dir}">
     		<manifest>
     			<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
-    			<attribute name="Class-Path" value="slf4j-log4j12-1.6.1.jar slf4j-api-1.6.1.jar log4j-1.2.16.jar jna-3.2.7.jar snakeyaml-1.11.jar guava-r08.jar high-scale-lib-1.1.2.jar libthrift-0.6.jar" />
+    			<attribute name="Class-Path" value="slf4j-log4j12-1.6.1.jar slf4j-api-1.6.1.jar log4j-1.2.16.jar jna-3.2.7.jar snakeyaml-1.11.jar guava-r08.jar high-scale-lib-1.1.2.jar libthrift-0.9.1.jar" />
     		</manifest>
     	</jar>
     	<delete>
 			<fileset dir="${build.class.dir}">
-			    <include name="**/*.*"/>
+				<include name="*.jar"/>
 				<exclude name="${fullname1}.jar"/>
 			</fileset>
 		</delete>
-
+		<delete dir="${build.class.dir}/org"></delete>
     </target>
 	
    <target name="deploy" depends="jar">
@@ -252,11 +252,9 @@
 			<fileset dir="${deploy.jar}">
 			    <include name="**/*.jar"/>
 			</fileset>
-			<fileset dir="${build.class.dir}">
-				<include name="**/*.jar"/>
-			</fileset>
-
 		</delete>
+		<delete dir="${build.class.dir}"/>
+		<mkdir dir="${build.class.dir}"/>
 	</target>
 
 </project>
