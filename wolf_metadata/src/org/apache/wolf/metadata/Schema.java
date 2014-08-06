@@ -71,4 +71,12 @@ public class Schema {
 	public Set<String> getTables() {
 		return tables.keySet();
 	}
+
+	public UUID getVersion() {
+		return version;
+	}
+	
+	public void setVersion(UUID newVersion){
+		version=newVersion;
+	}
 }

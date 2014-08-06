@@ -182,7 +182,7 @@
     </target>
 
 
-	<target name="wolf_metadata" depends="wolf_locator">
+	<target name="wolf_metadata" depends="wolf_locator,wolf_thrift">
 		<echo message="构建子工程【wolf_metadata】"></echo>
 		<ant dir="../wolf_metadata"></ant>
 	</target>
