@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.naming.ConfigurationException;
 
@@ -32,6 +33,10 @@ public class Schema {
 	public static Schema instances=new Schema(INITIAL_VERSION);
 	
 	private final BiMap<Pair<String,String>,Integer> cfIdMap=HashBiMap.create();
+
+	private static final int MIN_CF_ID=1000;
+
+	private final AtomicInteger cfldGen=new AtomicInteger(MIN_CF_ID);
 
 	public void addSystemTable(KSMetaData systemTable) {
 		tables.put(systemTable.getName(),systemTable);
@@ -78,5 +83,13 @@ public class Schema {
 	
 	public void setVersion(UUID newVersion){
 		version=newVersion;
+	}
+
+	public int nextCFId() {
+		return cfldGen.getAndIncrement();
+	}
+
+	public Integer getId(String ksName, String cfName) {
+		return cfIdMap.get(new Pair<String,String>(ksName,cfName));
 	}
 }

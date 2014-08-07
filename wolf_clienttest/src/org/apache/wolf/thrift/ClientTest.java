@@ -1,21 +1,17 @@
 package org.apache.wolf.thrift;
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.db.RowMutation;
+import org.apache.db.filter.QueryPath;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
-import org.apache.wolf.conf.DatabaseDescriptor;
-import org.apache.wolf.gossip.GossipService;
 import org.apache.wolf.service.StorageService;
-import org.apache.wolf.thrift.Wolf.Iface;
+import org.apache.wolf.utils.ByteBufferUtil;
 
 
 public class ClientTest {
@@ -38,9 +34,9 @@ public class ClientTest {
      */  
     public static void main(String[] args) throws Exception {  
         // TODO Auto-generated method stub  
-    	startClient();
-    	setupKeyspace(createConnection());
-    	
+    	//startClient();
+    	//setupKeyspace(createConnection());
+    	testWriting();
 		/*TSocket socket=new TSocket("localhost",9001);
 		TTransport trans=socket;
 		TProtocol protocol=new TBinaryProtocol(trans);
@@ -58,6 +54,16 @@ public class ClientTest {
 		//client.login(auth_request);
 		System.out.println(f);
 		trans.close();*/
+    }
+    
+    private static void testWriting() throws Exception{
+    	for(int i=0;i<100;i++){
+    		RowMutation change=new RowMutation(KEYSPACE,ByteBufferUtil.bytes(("key"+i)));
+    		ColumnPath cp=new ColumnPath(COLUMN_FAMILY).setColumn(("colb").getBytes());
+    		change.add(new QueryPath(cp),ByteBufferUtil.bytes("value"+i),0);
+    		//StorageProxy.mutate(Arrays.asList(change),ConsistencyLevel.ONE);
+    	}
+    	System.out.println("Done Writing");
     }
 
 	private static Wolf.Client createConnection() throws TTransportException {

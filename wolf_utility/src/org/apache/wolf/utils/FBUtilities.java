@@ -10,6 +10,7 @@ import javax.naming.ConfigurationException;
 public class FBUtilities {
 
 	public static final BigInteger TWO = new BigInteger("2");
+	public static int MAX_UNSIGNED_SHORT=0XFFFF;
 	
 	//private static volatile Logger logger_=LoggerFactory.getLogger(FBUtilities.class);
     public static <T> T construct(String classname, String readable) throws ConfigurationException

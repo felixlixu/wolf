@@ -1,12 +1,17 @@
 package org.apache.wolf.metadata;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 
-import org.apache.wolf.db.type.AbstractType;
-import org.apache.wolf.db.type.BytesType;
-import org.apache.wolf.db.type.ColumnFamilyType;
-import org.apache.wolf.db.type.TypeParser;
-import org.apache.wolf.db.type.UTF8Type;
+import javax.naming.ConfigurationException;
+
+import org.apache.wolf.data.basetype.AbstractType;
+import org.apache.wolf.data.basetype.BytesType;
+import org.apache.wolf.data.basetype.ColumnFamilyType;
+import org.apache.wolf.data.basetype.TypeParser;
+import org.apache.wolf.data.basetype.UTF8Type;
+import org.apache.wolf.io.serialize.IColumnSerializer;
+import org.apache.wolf.io.serialize.SerializerFactory;
 import org.apache.wolf.thrift.CfDef;
 import org.apache.wolf.thrift.InvalidRequestException;
 import org.apache.wolf.utils.StaticField;
@@ -54,6 +59,10 @@ public class CFMetaData {
 	private int minCompactionThreshlod;
 
 	private int maxCompactionThreshold;
+
+	private AbstractType defaultValidator;
+	
+	public CFMetaData defaultValidator(AbstractType prop){defaultValidator=prop;return this;}
 	
 	public CFMetaData(String keyspace, String cfname, ColumnFamilyType type,
 			AbstractType comparators, AbstractType subcc, int cfld) {
@@ -63,6 +72,8 @@ public class CFMetaData {
 		comparator=comparators;
 		subcolumnComparator=enforceSubccDefault(type,subcc);
 		cfId=cfld;
+		if(subcc!=null)
+			System.out.println(subcc.getClass().getName());
 		this.init();
 	}
 
@@ -71,6 +82,7 @@ public class CFMetaData {
 		replicateOnWrite=DEFAULT_REPLICATE_ON_WRITE;
 		gcGraceSecond=DEFAULT_GC_GRACE_SECONDS;
 		mergeShardsChance=DEFAULT_MERGE_SHARDS_CHANCE;
+		defaultValidator=BytesType.instance;
 		
 	}
 
@@ -84,8 +96,8 @@ public class CFMetaData {
 		return this;
 	}
 	
-	private CFMetaData readRepairChance(int i) {
-		readRepairChance=i;
+	private CFMetaData readRepairChance(double read_repair_chance) {
+		readRepairChance=read_repair_chance;
 		return this;
 	}
 	
@@ -132,7 +144,7 @@ public class CFMetaData {
 		return maxCompactionThreshold;
 	}
 
-	public static CFMetaData fromThrift(CfDef cf_def) throws InvalidRequestException  {
+	public static CFMetaData fromThrift(CfDef cf_def) throws InvalidRequestException, ConfigurationException, InvocationTargetException  {
 		ColumnFamilyType cfType=ColumnFamilyType.create(cf_def.column_type);
 		if(cfType==null){
 			throw new InvalidRequestException("Invalid column type"+cf_def.column_type);
@@ -144,7 +156,10 @@ public class CFMetaData {
 				TypeParser.parse(cf_def.comparator_type),
 				cf_def.subcomparator_type==null?null:TypeParser.parse(cf_def.subcomparator_type),
 				cf_def.isSetId()?cf_def.id:Schema.instances.nextCFId());
-		return null;
+		if(cf_def.isSetGc_grace_seconds()) {newCFMD.gcGraceSeconds(cf_def.gc_grace_seconds);}
+		//if(cf_def.isSetMin_compaction_threshold()){newCFMD.m}
+		return newCFMD.comment(cf_def.comment)
+				.readRepairChance(cf_def.read_repair_chance);
 	}
 
 	private static void applyImplicitDefaults(CfDef cf_def) {
@@ -176,6 +191,22 @@ public class CFMetaData {
 			System.out.println("The compression is false");
 			cf_def.compaction_strategy_options=Collections.emptyMap();
 		}
+	}
+
+	public AbstractType getDefaultValidator() {
+		return defaultValidator;
+	}
+
+	public ColumnFamilyType getCfType() {
+		return cfType;
+	}
+
+	public IColumnSerializer getColumnSerializer() {
+		if(cfType==ColumnFamilyType.Standard){
+			return SerializerFactory.getColumnSerializer();
+		}
+		return null;
+		//return SuperColumn.serializer(subcolumnComparator);
 	}
 
 }

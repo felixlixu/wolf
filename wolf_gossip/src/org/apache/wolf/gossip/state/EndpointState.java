@@ -3,7 +3,7 @@ package org.apache.wolf.gossip.state;
 import java.util.Map;
 
 import org.apache.wolf.gossip.state.serialize.EndpointStateSerializer;
-import org.apache.wolf.serialize.IVersionedSerializer;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

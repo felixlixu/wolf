@@ -29,6 +29,8 @@
 			<include name="wolf_locator**.jar" />
 			<include name="wolf_utility**.jar" />
 			<include name="wolf_thrift**.jar"  />
+			<include name="wolf_dbtype**.jar"/>
+			<include name="wolf_io**.jar"/>
 		</fileset>
 	</path>
 

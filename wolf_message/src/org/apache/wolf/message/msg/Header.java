@@ -4,9 +4,9 @@ import java.net.InetAddress;
 import java.util.Collections;
 import java.util.Map;
 
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 import org.apache.wolf.message.serialize.CompactEndpointSerializationHelper;
 import org.apache.wolf.message.serialize.HeaderSerializer;
-import org.apache.wolf.serialize.IVersionedSerializer;
 import org.apache.wolf.utils.FBUtilities;
 
 public class Header {

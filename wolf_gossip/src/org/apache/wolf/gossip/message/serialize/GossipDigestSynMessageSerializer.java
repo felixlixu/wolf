@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.wolf.gossip.message.GossipDigest;
 import org.apache.wolf.gossip.message.GossipDigestSynMessage;
-import org.apache.wolf.serialize.IVersionedSerializer;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 
 public class GossipDigestSynMessageSerializer implements
 		IVersionedSerializer<GossipDigestSynMessage> {

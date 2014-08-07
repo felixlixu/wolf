@@ -3,7 +3,7 @@ package org.apache.wolf.gossip.message;
 import java.net.InetAddress;
 
 import org.apache.wolf.gossip.message.serialize.GossipDigestSerializer;
-import org.apache.wolf.serialize.IVersionedSerializer;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 
 public class GossipDigest implements Comparable<GossipDigest> {
 

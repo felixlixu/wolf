@@ -7,7 +7,7 @@ import java.util.TreeSet;
 
 import javax.naming.ConfigurationException;
 
-import org.apache.wolf.db.type.BytesType;
+import org.apache.wolf.data.basetype.BytesType;
 import org.apache.wolf.utils.ByteBufferUtil;
 import org.apache.wolf.utils.StaticField;
 

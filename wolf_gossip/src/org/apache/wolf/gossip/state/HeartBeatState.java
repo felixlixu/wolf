@@ -1,7 +1,7 @@
 package org.apache.wolf.gossip.state;
 
 import org.apache.wolf.gossip.state.serialize.HeartBeatStateSerializer;
-import org.apache.wolf.serialize.IVersionedSerializer;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 
 public class HeartBeatState {
 

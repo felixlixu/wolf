@@ -5,7 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 import org.apache.wolf.gossip.state.HeartBeatState;
-import org.apache.wolf.serialize.IVersionedSerializer;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 
 public class HeartBeatStateSerializer implements
 		IVersionedSerializer<HeartBeatState> {

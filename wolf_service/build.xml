@@ -8,40 +8,39 @@
      Felix                                                                
      ====================================================================== -->
 <project name="wolf_service" default="default" basedir=".">
-	<property name="src.dir" value="src"/>
-	<property name="build.dir" value="build"/>
-	<property name="version" value="1.0"/>
-	<property name="class.dir" value="${build.dir}/classes"/>
-	<property name="jar.dir" value="${build.dir}/jar"/>
-	<property name="fullname1" value="${ant.project.name}-${version}"/>
-	<property name="deploy.jar" value="../build"/>
-	<property name="build.class.dir" value="../buildClass"/>
-	
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="version" value="1.0" />
+	<property name="class.dir" value="${build.dir}/classes" />
+	<property name="jar.dir" value="${build.dir}/jar" />
+	<property name="fullname1" value="${ant.project.name}-${version}" />
+	<property name="deploy.jar" value="../build" />
+	<property name="build.class.dir" value="../buildClass" />
+
 	<path id="project.classpath">
-	    <fileset dir="${basedir}/../lib">   
-	        <include name="**/*.jar"/>   
-	    </fileset>
+		<fileset dir="${basedir}/../lib">
+			<include name="**/*.jar" />
+		</fileset>
 		<fileset dir="${deploy.jar}">
-			<include name="wolf_db**.jar"/>
-			<include name="wolf_config**.jar"/>
-			<include name="wolf_cache**.jar"/>
-			<include name="wolf_metadata**.jar"/>
-			<include name="wolf_utility**.jar"/>
-			<include name="wolf_storage**.jar"/>
-			<include name="wolf_locator**.jar"/>
-			<include name="wolf_io**.jar"/>
-			<include name="wolf_thrift**.jar"/>
+			<include name="wolf_db**.jar" />
+			<include name="wolf_config**.jar" />
+			<include name="wolf_cache**.jar" />
+			<include name="wolf_metadata**.jar" />
+			<include name="wolf_utility**.jar" />
+			<include name="wolf_storage**.jar" />
+			<include name="wolf_locator**.jar" />
+			<include name="wolf_io**.jar" />
+			<include name="wolf_thrift**.jar" />
 		</fileset>
 	</path>
-	
-	
-    <target name="jar" depends="default" description="description">
-        <mkdir dir="${jar.dir}"/>
-    	<jar destfile="${jar.dir}/${fullname1}.jar" basedir="${class.dir}">
-    		<manifest>
-    			<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
-    			<attribute name="Class-Path" 
-    				value="
+
+
+	<target name="jar" depends="default" description="description">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/${fullname1}.jar" basedir="${class.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
+				<attribute name="Class-Path" value="
     					slf4j-log4j12-1.6.1.jar 
     					slf4j-api-1.6.1.jar 
     					log4j-1.2.16.jar 
@@ -55,206 +54,240 @@
     					wolf_cache-1.0.jar
     					wolf_metadata-1.0.jar
     				" />
-    		</manifest>
-    	</jar>
-    	<jar destfile="${build.class.dir}/${fullname1}.jar" basedir="${build.class.dir}">
-    		<manifest>
-    			<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
-    			<attribute name="Class-Path" value="slf4j-log4j12-1.6.1.jar slf4j-api-1.6.1.jar log4j-1.2.16.jar jna-3.2.7.jar snakeyaml-1.11.jar guava-r08.jar high-scale-lib-1.1.2.jar libthrift-0.9.1.jar" />
-    		</manifest>
-    	</jar>
-    	<delete>
+			</manifest>
+		</jar>
+		<jar destfile="${build.class.dir}/${fullname1}.jar" basedir="${build.class.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="org.apache.wolf.service.WolfServiceDaemon" />
+				<attribute name="Class-Path" value="slf4j-log4j12-1.6.1.jar slf4j-api-1.6.1.jar log4j-1.2.16.jar jna-3.2.7.jar snakeyaml-1.11.jar guava-r08.jar high-scale-lib-1.1.2.jar libthrift-0.9.1.jar" />
+			</manifest>
+		</jar>
+		<delete>
 			<fileset dir="${build.class.dir}">
-				<include name="*.jar"/>
-				<exclude name="${fullname1}.jar"/>
+				<include name="*.jar" />
+				<exclude name="${fullname1}.jar" />
 			</fileset>
 		</delete>
-		<delete dir="${build.class.dir}/org"></delete>
-    </target>
-	
-   <target name="deploy" depends="clean,jar">
-    	<copy file="${jar.dir}/${fullname1}.jar" todir="${deploy.jar}"></copy>
+		<delete dir="${build.class.dir}/org">
+		</delete>
+	</target>
+
+	<target name="deploy" depends="clean,jar">
+		<copy file="${jar.dir}/${fullname1}.jar" todir="${deploy.jar}">
+		</copy>
 		<copy todir="${deploy.jar}">
-		  <fileset dir="${basedir}/../lib">
-		   	<include name="**/*.jar"/> 
-		  </fileset>
+			<fileset dir="${basedir}/../lib">
+				<include name="**/*.jar" />
+			</fileset>
 		</copy>
 		<copy todir="${build.class.dir}">
-		  <fileset dir="${basedir}/../lib">
-		   	<include name="**/*.jar"/> 
-		  </fileset>
+			<fileset dir="${basedir}/../lib">
+				<include name="**/*.jar" />
+			</fileset>
 		</copy>
-    </target>
-	
+	</target>
+
 	<!-- ================================= 
           target: run              
          ================================= -->
-    <target name="run" depends="deploy" description="description">
-        <java classname="org.apache.wolf.service.WolfServiceDaemon">
-        	<classpath>
-        		<path>
-        			<fileset dir="${deploy.jar}">
-        				<include name="**/*.*"/> 
-        			</fileset>
-        		</path>
-        	</classpath>
-        </java>
-    </target>
+	<target name="run" depends="deploy" description="description">
+		<java classname="org.apache.wolf.service.WolfServiceDaemon">
+			<classpath>
+				<path>
+					<fileset dir="${deploy.jar}">
+						<include name="**/*.*" />
+					</fileset>
+				</path>
+			</classpath>
+		</java>
+	</target>
 
-	
-    <!-- ================================= 
+
+	<!-- ================================= 
           target: default              
          ================================= -->
-    <target name="default" depends="wolf_db,wolf_cache,wolf_thrift" description="description">
-        <echo message="构建子工程【wolf_service】"></echo>
-		<delete dir="${class.dir}"></delete>
-    	<mkdir dir="${class.dir}"/>
-    	<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
-    		<classpath refid="project.classpath"></classpath>
-    	</javac>
-    	<copy todir="${class.dir}" file="${src.dir}\log4j.properties"></copy>
-		<copy todir="${build.class.dir}">
-		  <fileset dir="${class.dir}">
-		   	<include name="**/*.*"/> 
-		  </fileset>
+	<target name="default" depends="wolf_db,wolf_cache,wolf_thrift" description="description">
+		<echo message="构建子工程【wolf_service】">
+		</echo>
+		<delete dir="${class.dir}">
+		</delete>
+		<mkdir dir="${class.dir}" />
+		<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
+			<classpath refid="project.classpath">
+			</classpath>
+		</javac>
+		<copy todir="${class.dir}" file="${src.dir}\log4j.properties">
 		</copy>
-    </target>
-	
+		<copy todir="${build.class.dir}">
+			<fileset dir="${class.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>
+	</target>
+
 	<!-- ================================= 
           target: wolf_db              
          ================================= -->
-    <target name="wolf_db" depends="wolf_storage,wolf_sstable" description="description">
-        <echo message="构建子工程【wolf_db】"></echo>
-    	<ant dir="..\wolf_db"></ant>
-    </target>
+	<target name="wolf_db" depends="wolf_storage,wolf_sstable" description="description">
+		<echo message="构建子工程【wolf_db】">
+		</echo>
+		<ant dir="..\wolf_db">
+		</ant>
+	</target>
 
-	
+
 	<!-- ================================= 
           target: wolf_storage              
          ================================= -->
-    <target name="wolf_storage" depends="wolf_gossip" description="description">
-        <echo message="构建子工程【wolf_storage】"></echo>
-    	<ant dir="..\wolf_storage"></ant>
-    </target>
+	<target name="wolf_storage" depends="wolf_gossip" description="description">
+		<echo message="构建子工程【wolf_storage】">
+		</echo>
+		<ant dir="..\wolf_storage">
+		</ant>
+	</target>
 
-	
+
 	<!-- ================================= 
           target: wolf_gossip              
          ================================= -->
-    <target name="wolf_gossip" depends="wolf_message,wolf_io" description="description">
-        <echo message="构建子工程【wolf_gossip】"></echo>
-    	<ant dir="..\wolf_gossip"></ant>
-    </target>
+	<target name="wolf_gossip" depends="wolf_message,wolf_io" description="description">
+		<echo message="构建子工程【wolf_gossip】">
+		</echo>
+		<ant dir="..\wolf_gossip">
+		</ant>
+	</target>
 
-	
+
 	<!-- ================================= 
           target: wolf_message              
          ================================= -->
-    <target name="wolf_message" depends="wolf_concurrent,wolf_serializer" description="description">
-        <echo message="构建子工程【wolf_message】"></echo>
-    	<ant dir="..\wolf_message"></ant>
-    </target>
+	<target name="wolf_message" depends="wolf_concurrent" description="description">
+		<echo message="构建子工程【wolf_message】">
+		</echo>
+		<ant dir="..\wolf_message">
+		</ant>
+	</target>
 
-	
+
 	<!-- ================================= 
           target: wolf_concurrent              
          ================================= -->
-    <target name="wolf_concurrent" depends="wolf_config" description="description">
-        <echo message="构建子工程【wolf_concurrent】"></echo>
-    	<ant dir="..\wolf_concurrent"></ant>
-    </target>
+	<target name="wolf_concurrent" depends="wolf_config" description="description">
+		<echo message="构建子工程【wolf_concurrent】">
+		</echo>
+		<ant dir="..\wolf_concurrent">
+		</ant>
+	</target>
 
 	<!-- ================================= 
           target: wolf_sstable              
          ================================= -->
-    <target name="wolf_sstable" depends="wolf_config,wolf_io" description="description">
-        <echo message="构建子工程【wolf_sstable】"></echo>
-      	<ant dir="..\wolf_sstable"></ant>
-    </target>
+	<target name="wolf_sstable" depends="wolf_config,wolf_io" description="description">
+		<echo message="构建子工程【wolf_sstable】">
+		</echo>
+		<ant dir="..\wolf_sstable">
+		</ant>
+	</target>
 
-	
+
 	<!-- ================================= 
           target: wolf_config              
          ================================= -->
-    <target name="wolf_config" depends="wolf_metadata" description="description">
-        <echo message="构建子工程【wolf_config】"></echo>
-    	<ant dir="..\wolf_config"></ant>
-    </target>
-
-
-	<target name="wolf_metadata" depends="wolf_locator,wolf_thrift">
-		<echo message="构建子工程【wolf_metadata】"></echo>
-		<ant dir="../wolf_metadata"></ant>
+	<target name="wolf_config" depends="wolf_metadata" description="description">
+		<echo message="构建子工程【wolf_config】">
+		</echo>
+		<ant dir="..\wolf_config">
+		</ant>
 	</target>
-	
+
+
+	<target name="wolf_metadata" depends="wolf_locator,wolf_thrift,wolf_io">
+		<echo message="构建子工程【wolf_metadata】">
+		</echo>
+		<ant dir="../wolf_metadata">
+		</ant>
+	</target>
+
 	<!-- ================================= 
           target: wolf_locator              
          ================================= -->
-    <target name="wolf_locator" depends="wolf_dht" description="description">
-        <echo message="构建子工程【wolf_locator】"></echo>
-    	<ant dir="..\wolf_locator"></ant>
-    </target>
-	
+	<target name="wolf_locator" depends="wolf_dht" description="description">
+		<echo message="构建子工程【wolf_locator】">
+		</echo>
+		<ant dir="..\wolf_locator">
+		</ant>
+	</target>
+
 	<!-- ================================= 
           target: wolf_dht              
          ================================= -->
-    <target name="wolf_dht" depends="wolf_utility" description="description">
-        <echo message="构建子工程【wolf_dht】"></echo>
-    	<ant dir="..\wolf_dht"></ant>
-    </target>
-	
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: depends                      
-         - - - - - - - - - - - - - - - - - -->
-    <target name="wolf_utility">
-    	<echo message="构建子工程 【wolf_utility】"></echo>
-    	<ant dir="..\wolf_utility"></ant>
-    </target>
-	
-	<!-- ================================= 
-          target: wolf_serializer              
-         ================================= -->
-    <target name="wolf_serializer" description="description">
-    	<echo message="构建子工程 【wolf_serializer】"></echo>
-    	<ant dir="..\wolf_serializer"></ant>    	
-    </target>
-	
+	<target name="wolf_dht" depends="wolf_utility" description="description">
+		<echo message="构建子工程【wolf_dht】">
+		</echo>
+		<ant dir="..\wolf_dht">
+		</ant>
+	</target>
+
+
 	<!-- ================================= 
           target: wolf_io	              
          ================================= -->
-    <target name="wolf_io"  description="description">
-    	<echo message="构建子工程 【wolf_IO】"></echo>
-    	<ant dir="..\wolf_io"></ant>         
-    </target>
+	<target name="wolf_io" depends="wolf_dbtype" description="description">
+		<echo message="构建子工程 【wolf_IO】">
+		</echo>
+		<ant dir="..\wolf_io">
+		</ant>
+	</target>
 	
+	<!-- ================================= 
+          target: wolf_dbtype              
+         ================================= -->
+	<target name="wolf_dbtype" depends="wolf_utility" description="description">
+		<echo message="构建子工程 【wolf_serializer】">
+		</echo>
+		<ant dir="..\wolf_dbtype">
+		</ant>
+	</target>
+	
+	
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: depends                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="wolf_utility">
+		<echo message="构建子工程 【wolf_utility】">
+		</echo>
+		<ant dir="..\wolf_utility">
+		</ant>
+	</target>
+
 	<!-- ================================= 
           target: wolf_cache              
          ================================= -->
-    <target name="wolf_cache" description="description">
-    	<echo message="构建子工程 【wolf_cache】"></echo>
-    	<ant dir="..\wolf_cache"></ant>          
-    </target>
-	
+	<target name="wolf_cache" description="description">
+		<echo message="构建子工程 【wolf_cache】">
+		</echo>
+		<ant dir="..\wolf_cache">
+		</ant>
+	</target>
+
 	<!-- - - - - - - - - - - - - - - - - - 
           target: wolf_thrift                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="wolf_thrift">
-            <echo message="build wolf_thrift"></echo>
-    		<ant dir="..\wolf_thrift"></ant>
-    </target>
+	<target name="wolf_thrift">
+		<echo message="build wolf_thrift">
+		</echo>
+		<ant dir="..\wolf_thrift">
+		</ant>
+	</target>
 
-
-
-
-	
 	<target name="clean">
 		<delete>
 			<fileset dir="${deploy.jar}">
-			    <include name="**/*.jar"/>
+				<include name="**/*.jar" />
 			</fileset>
 		</delete>
-		<delete dir="${build.class.dir}"/>
-		<mkdir dir="${build.class.dir}"/>
+		<delete dir="${build.class.dir}" />
+		<mkdir dir="${build.class.dir}" />
 	</target>
 
 </project>

@@ -28,8 +28,9 @@
 		<fileset dir="${deploy.jar}">
 			<include name="wolf_config**.jar" />
 			<include name="wolf_utility**.jar"/>
-			<include name="wolf_serializer**.jar"/>
+			<include name="wolf_io**.jar"/>
 			<include name="wolf_concurrent**.jar"/>
+			<include name="wolf_dbtype**.jar"/>
 		</fileset>
 	</path>
 

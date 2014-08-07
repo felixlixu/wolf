@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import org.apache.wolf.gossip.message.GossipDigest;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 import org.apache.wolf.message.serialize.CompactEndpointSerializationHelper;
-import org.apache.wolf.serialize.IVersionedSerializer;
 
 public class GossipDigestSerializer implements
 		IVersionedSerializer<GossipDigest> {

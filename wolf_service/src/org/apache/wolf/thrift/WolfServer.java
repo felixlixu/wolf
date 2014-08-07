@@ -1,6 +1,7 @@
 package org.apache.wolf.thrift;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -214,14 +215,26 @@ public class WolfServer implements Wolf.Iface {
 				throw new InvalidRequestException("CfDef("+cf.getName()+") had a keypsace definition that did not match KsDef");
 			}
 		}
-		Collection<CFMetaData> cfDefs=new ArrayList<CFMetaData>(ks_def.cf_defs.size());
-		for(CfDef cf_def:ks_def.cf_defs){
-			cf_def.unsetId();
-			//CFMetaData.addDefaultIndexNames(cf_def);
-			cfDefs.add(CFMetaData.fromThrift(cf_def));
+		try{
+			Collection<CFMetaData> cfDefs=new ArrayList<CFMetaData>(ks_def.cf_defs.size());
+			for(CfDef cf_def:ks_def.cf_defs){
+				cf_def.unsetId();
+				//CFMetaData.addDefaultIndexNames(cf_def);
+				cfDefs.add(CFMetaData.fromThrift(cf_def));
+			}
+			//applyMigrationOnStage(new AddKeySpace(KSMetaData.fromThrift(ks_def,cfDefs.toArray(new CFMetaData[cfDefs.size()]))));
+			return Schema.instances.getVersion().toString();
+		}catch(ConfigurationException e){
+			InvalidRequestException ex=new InvalidRequestException(e.getMessage());
+			ex.initCause(e);
+			throw ex;
 		}
-		//applyMigrationOnStage(new AddKeySpace(KSMetaData.fromThrift(ks_def,cfDefs.toArray(new CFMetaData[cfDefs.size()]))));
-		return Schema.instances.getVersion().toString();
+		catch (InvocationTargetException e) {
+			InvalidRequestException ex=new InvalidRequestException(e.getMessage());
+			ex.initCause(e);
+			throw ex;
+		}
+		
 	}
 
 	/*private ClientState state() {

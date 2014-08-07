@@ -18,6 +18,7 @@ import javax.naming.ConfigurationException;
 import org.apache.wolf.concurrent.Stage;
 import org.apache.wolf.concurrent.StageManager;
 import org.apache.wolf.conf.DatabaseDescriptor;
+import org.apache.wolf.io.serialize.SerializerType;
 import org.apache.wolf.message.handler.IMessageCall;
 import org.apache.wolf.message.handler.IVerbHandler;
 import org.apache.wolf.message.handler.MessageDeliveryTask;
@@ -26,7 +27,6 @@ import org.apache.wolf.message.msg.MessageVerb;
 import org.apache.wolf.message.net.OutboundTcpConnection;
 import org.apache.wolf.message.net.OutboundTcpConnectionPool;
 import org.apache.wolf.message.net.SocketThread;
-import org.apache.wolf.serialize.SerializerType;
 import org.apache.wolf.util.ConfFBUtilities;
 import org.apache.wolf.utils.SimpleCondition;
 import org.cliffc.high_scale_lib.NonBlockingHashMap;
@@ -48,7 +48,7 @@ public class MessageServiceProducer {
 	private final SimpleCondition listenGate;
 	private static AtomicInteger idGen=new AtomicInteger(0);
 
-	public static SerializerType serializerType_=SerializerType.BINARY;
+	public static org.apache.wolf.io.serialize.SerializerType serializerType_=SerializerType.BINARY;
 	
 	public static MessageServiceProducer instance=new MessageServiceProducer();
 	public static final int PROTOCOL_MAGIC = 0XCA552DFA;

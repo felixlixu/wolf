@@ -9,8 +9,8 @@ import org.apache.wolf.gossip.state.ApplicationState;
 import org.apache.wolf.gossip.state.EndpointState;
 import org.apache.wolf.gossip.state.HeartBeatState;
 import org.apache.wolf.gossip.state.VersionedValue;
+import org.apache.wolf.io.serialize.IVersionedSerializer;
 import org.apache.wolf.produce.GossiperServiceProducer;
-import org.apache.wolf.serialize.IVersionedSerializer;
 
 public class EndpointStateSerializer implements
 		IVersionedSerializer<EndpointState> {
