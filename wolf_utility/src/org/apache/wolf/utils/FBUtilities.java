@@ -7,6 +7,7 @@ import javax.naming.ConfigurationException;
 
 
 
+
 public class FBUtilities {
 
 	public static final BigInteger TWO = new BigInteger("2");

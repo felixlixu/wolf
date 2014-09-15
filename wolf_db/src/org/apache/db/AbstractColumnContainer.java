@@ -5,9 +5,9 @@ import org.apache.wolf.utils.HeapAllocator;
 
 public abstract class AbstractColumnContainer implements IColumnContainer,IIterableColumns{
 
-	private final IColumn columns;
+	private final ISortedColumns columns;
 
-	public AbstractColumnContainer(IColumn columns) {
+	public AbstractColumnContainer(ISortedColumns columns) {
 		this.columns=columns;
 	}
 

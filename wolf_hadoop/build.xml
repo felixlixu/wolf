@@ -7,7 +7,7 @@
                    
      P0017359                                                                
      ====================================================================== -->
-<project name="wolf_db" default="deploy" basedir="." >
+<project name="wolf_hadoop" default="deploy" basedir="." >
     <description>
             description
     </description>
@@ -24,19 +24,6 @@
 	    <fileset dir="${basedir}/../lib">   
 	        <include name="**/*.jar"/>   
 	    </fileset>
-		<fileset dir="${deploy.jar}">
-			<include name="wolf_config**.jar"/>
-			<include name="wolf_dht**.jar"/>
-			<include name="wolf_metadata**.jar"/>
-			<include name="wolf_sstable**.jar"/>
-			<include name="wolf_utility**.jar"/>
-			<include name="wolf_storage**.jar"/>
-			<include name="wolf_locator**.jar"/>
-			<include name="wolf_io**.jar"/>
-			<include name="wolf_dbtype**.jar" />
-			<include name="wolf_thrift**.jar"/>
-			<include name="wolf_message**.jar"/>
-		</fileset>
 	</path>
 
 
@@ -51,11 +38,11 @@
     	<javac srcdir="${src.dir}" destdir="${class.dir}" includeAntRuntime="false">
     		<classpath refid="project.classpath"></classpath>
     	</javac>
-    		<copy todir="${build.class.dir}">
-    		  <fileset dir="${class.dir}">
-    		   	<include name="**/*.class"/> 
-    		  </fileset>
-    		</copy>
+		<copy todir="${build.class.dir}">
+		  <fileset dir="${class.dir}">
+		   	<include name="**/*.class"/> 
+		  </fileset>
+		</copy>
     </target>
 	
 	<!-- ================================= 

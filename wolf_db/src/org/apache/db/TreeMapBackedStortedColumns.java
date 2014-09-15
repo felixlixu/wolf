@@ -1,6 +1,7 @@
 package org.apache.db;
 
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -45,6 +46,12 @@ public class TreeMapBackedStortedColumns extends AbstractThreadUnSafeSrotedColum
 	public void addColumn(IColumn column, HeapAllocator allocator) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Iterator<IColumn> iterator() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

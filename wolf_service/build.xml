@@ -128,7 +128,7 @@
 	<!-- ================================= 
           target: wolf_db              
          ================================= -->
-	<target name="wolf_db" depends="wolf_storage,wolf_sstable" description="description">
+	<target name="wolf_db" depends="wolf_storage,wolf_sstable,wolf_thrift" description="description">
 		<echo message="构建子工程【wolf_db】">
 		</echo>
 		<ant dir="..\wolf_db">

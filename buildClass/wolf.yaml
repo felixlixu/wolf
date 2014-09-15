@@ -1,0 +1,18 @@
+listen_address: 127.0.0.1
+storage_port: 9025
+rpc_Timeout: 60000
+concurrent_writes: 5
+broadcast_address: localhost
+rpc_port: 9001
+rpc_address: 127.0.0.1
+thrift_framed_transport_size: 15
+seeds: 
+ - localhost
+endpoint_snitch: org.apache.wolf.locator.snitch.SimpleSnitch
+cluster_name: test
+partitioner: org.apache.wolf.dht.partition.OrderPreservingPartitioner
+data_file_directories: 
+  - D:\SHDownload\FILE1
+  - D:\SHDownload\FILE2
+commitlog_directory: D:\SHDownload\COMMILT
+saved_caches_directory: D:\SHDownload\CACHE

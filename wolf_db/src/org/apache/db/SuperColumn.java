@@ -11,11 +11,11 @@ public class SuperColumn extends AbstractColumnContainer implements IColumn {
 
 	private final ByteBuffer name;
 
-	public SuperColumn(ByteBuffer superColumnName, AbstractType comparator) {
-		this(superColumnName,AtomicSortedColumns.factory.create(comparator,false));
+	public SuperColumn(ByteBuffer name, AbstractType comparator) {
+		this(name,AtomicSortedColumns.factory.create(comparator,false));
 	}
 
-	public SuperColumn(ByteBuffer name, IColumn columns) {
+	public SuperColumn(ByteBuffer name, ISortedColumns columns) {
         super(columns);
         assert name != null;
         assert name.remaining() <= IColumn.MAX_NAME_LENGTH;
